@@ -12,6 +12,7 @@
 
 #include "mfcplotDoc.h"
 #include "mfcplotView.h"
+#include "CFuncDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -27,6 +28,9 @@ BEGIN_MESSAGE_MAP(CmfcplotView, CView)
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
+//	ON_WM_NCMOUSEMOVE()
+	ON_WM_MOUSEMOVE()
+	ON_COMMAND(ID_NORMAL_FUNC_MENU, &CmfcplotView::OnNormalFuncMenu)
 END_MESSAGE_MAP()
 
 // CmfcplotView 构造/析构
@@ -57,11 +61,43 @@ void CmfcplotView::OnDraw(CDC* pDC)
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
-
 	// TODO: 在此处为本机数据添加绘制代码
-	pDC->MoveTo(1, 1);
-	for (int i = 1; i <= 1000; i+=1)
-		pDC->LineTo(i,i);
+	//CClientDC dc(this);
+	CRect rect;
+	GetClientRect(&rect);
+	pDC->SetMapMode(MM_LOMETRIC);     //设置映射模式；	
+	pDC->SetWindowOrg(0, 0);               //设置屏幕窗口原点；
+	pDC->SetViewportOrg(CPoint(rect.right / 2, rect.bottom / 2));  //设置视口原点
+	
+	CPen pen1(PS_DOT, 1, RGB(100, 100, 100));           //创建笔，并调整坐标颜色
+	CPen* pOldPen = pDC->SelectObject(&pen1);           //更改笔并保存旧的笔
+
+	pDC->MoveTo(0, 0);
+//	pDC->LineTo(100, );
+
+/*	for (int i = -900; i <= 900; i += 50)
+	{
+		pDC->MoveTo(i, 500);
+		pDC->LineTo(i, -500);
+	}
+	for (int j = -500; j <= 500; j += 50)
+	{
+		pDC->MoveTo(-900, j);
+		pDC->LineTo(900, j);
+	}
+	//pDC->TextOutW()
+	pDC->TextOutW(10, 500, _T("y"));     //标记y轴
+	pDC->TextOutW(870, 0, _T("x"));      //标记x轴
+	pDC->TextOutW(0, 0, _T("0"));        //标记坐标原点
+	pDC->TextOutW(-8, 510, _T("^"));
+	pDC->TextOutW(900, 25, _T(">"));
+	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));//创建笔，并调整坐标颜色
+	pOldPen = pDC->SelectObject(&pen);//更改笔并保存旧的笔
+	pDC->MoveTo(-900, 0);    //横坐标
+	pDC->LineTo(900, 0);
+	pDC->MoveTo(0, -500);    //纵坐标
+	pDC->LineTo(0, 500);*/
+	
 }
 
 
@@ -106,3 +142,36 @@ CmfcplotDoc* CmfcplotView::GetDocument() const // 非调试版本是内联的
 
 
 // CmfcplotView 消息处理程序
+
+
+//void CmfcplotView::OnNcMouseMove(UINT nHitTest, CPoint point)
+//{
+//	// TODO: 在此添加消息处理程序代码和/或调用默认值
+//
+//	CView::OnNcMouseMove(nHitTest, point);
+//}
+
+
+void CmfcplotView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+
+	CStatusBar* pBar = (CStatusBar*)AfxGetApp()->m_pMainWnd->GetDescendantWindow(AFX_IDW_STATUS_BAR);
+	if (pBar) {
+		CString msg;
+		msg.Format(_T("(%d,%d)"), point.x, point.y);
+		pBar->SetPaneText(1, msg);
+	}
+
+	CView::OnMouseMove(nFlags, point);
+}
+
+
+void CmfcplotView::OnNormalFuncMenu()
+{
+	// TODO: 在此添加命令处理程序代码
+	CFuncDlg dlg;
+	if (dlg.DoModal() == IDOK) {
+
+	}
+}

@@ -40,6 +40,10 @@ protected:
 // 生成的消息映射函数
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+//	afx_msg void OnNcMouseMove(UINT nHitTest, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnNormalFuncMenu();
 };
 
 #ifndef _DEBUG  // mfcplotView.cpp 中的调试版本

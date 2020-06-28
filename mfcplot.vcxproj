@@ -183,7 +183,10 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CalculatorFunc.h" />
+    <ClInclude Include="CFuncDlg.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="FuncData.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="mfcplot.h" />
     <ClInclude Include="mfcplotDoc.h" />
@@ -193,6 +196,9 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CalculatorFunc.cpp" />
+    <ClCompile Include="CFuncDlg.cpp" />
+    <ClCompile Include="FuncData.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="mfcplot.cpp" />
     <ClCompile Include="mfcplotDoc.cpp" />
