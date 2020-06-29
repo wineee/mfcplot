@@ -217,6 +217,7 @@
     <None Include="res\mfcplot.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\icon1.ico" />
     <Image Include="res\mfcplot.ico" />
     <Image Include="res\mfcplotDoc.ico" />
     <Image Include="res\Toolbar.bmp" />
