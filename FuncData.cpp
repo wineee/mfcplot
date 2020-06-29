@@ -6,8 +6,7 @@
 #include "FuncData.h"
 
 
-// FuncData
-
+//Func calculator
 #define MAXNUM 100
 #define MAXOPT 100
 
@@ -19,22 +18,22 @@ bool IsNum(char c) {
 	return c >= '0' && c <= '9';
 }
 
-double GetNum(CString& Eq, int& i, int radix)
+double GetNum(CString& Eq, int& i)
 {
 	double x = 0;
 	while (i < Eq.GetLength() && IsNum(Eq[i]))
 	{
-		x = x * radix + Eq[i] - '0';
+		x = x * 10 + Eq[i] - '0';
 		i++;
 	}
-	double rad = 1.0 / radix;
+	double rad = 0.1;
 	if (i < Eq.GetLength() && Eq[i] == '.')
 	{
 		i++;
 		while (i < Eq.GetLength() && IsNum(Eq[i]))
 		{
 			x = x + (Eq[i] - '0') * rad;
-			rad = rad / radix;
+			rad = rad / 10;
 			i++;
 		}
 	}
@@ -75,7 +74,7 @@ bool GetOutSta(double* num, int& ntop, char* opt, int& otop) {
 	return 1;
 }
 
-bool MyCalculator::Calc(CString Equation, CString& ans, int radix)
+bool Calc(CString Equation, CString& ans)
 {
 	double num[MAXNUM];
 	int ntop = 0;
@@ -100,7 +99,7 @@ bool MyCalculator::Calc(CString Equation, CString& ans, int radix)
 		}
 		if (!IsNum(Equation[i]))
 			return FALSE;
-		num[++ntop] = GetNum(Equation, i, radix) * (flag ? -1 : 1);
+		num[++ntop] = GetNum(Equation, i) * (flag ? -1 : 1);
 		if (i >= Len) break;
 
 		if (Equation[i] == ')')
@@ -145,11 +144,11 @@ bool MyCalculator::Calc(CString Equation, CString& ans, int radix)
 	}
 	if (ntop != 1) return FALSE;
 	ans.Format(_T("%g"), num[ntop]);
-	if (radix != 10) {
-		ConvertRad(ans, 10, radix);
-	}
+	
 	return TRUE;
 }
+
+// FuncData
 
 FuncData::FuncData(CString Equation) {
 	m_Equation = Equation;

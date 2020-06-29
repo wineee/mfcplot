@@ -14,10 +14,13 @@ protected: // 仅从序列化创建
 
 // 特性
 public:
-
+	bool m_WillShowGrid;
+	bool m_WillShowAxis;
+	double m_Xmin, m_Xmax, m_Ymin, m_Ymax;
+	//int nTop, nButton, nLeft, nRight;
 // 操作
 public:
-
+	
 // 重写
 public:
 	virtual BOOL OnNewDocument();
@@ -45,4 +48,11 @@ protected:
 	// 用于为搜索处理程序设置搜索内容的 Helper 函数
 	void SetSearchContent(const CString& value);
 #endif // SHARED_HANDLERS
+public:
+	afx_msg void OnAxisMenu();
+//	afx_msg void OnGridMenu();
+//	afx_msg void OnUpdateGridMenu(CCmdUI* pCmdUI);
+	afx_msg void OnGridMenu();
+	afx_msg void OnSmallerMenu();
+	afx_msg void OnBiggerMenu();
 };

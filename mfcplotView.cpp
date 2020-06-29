@@ -31,6 +31,11 @@ BEGIN_MESSAGE_MAP(CmfcplotView, CView)
 //	ON_WM_NCMOUSEMOVE()
 	ON_WM_MOUSEMOVE()
 	ON_COMMAND(ID_NORMAL_FUNC_MENU, &CmfcplotView::OnNormalFuncMenu)
+	//ON_COMMAND(ID_BIGGER_MENU, &CmfcplotView::OnBiggerMenu)
+	ON_WM_SETCURSOR()
+	ON_COMMAND(ID_MOVE_MENU, &CmfcplotView::OnMoveMenu)
+	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
 // CmfcplotView 构造/析构
@@ -38,7 +43,18 @@ END_MESSAGE_MAP()
 CmfcplotView::CmfcplotView() noexcept
 {
 	// TODO: 在此处添加构造代码
-
+	isMoving = false;
+	//下面这个没什么用，防止编译警告
+	tmp_Xmin = m_Xmin = -10;
+	tmp_Xmax = m_Xmax = 10;
+	tmp_Ymin = m_Ymin = -1;
+	tmp_Ymax = m_Ymax = 1;
+	CRect rect;
+	GetClientRect(&rect);
+	nTop = static_cast<int>(rect.bottom * 0.1);
+	nButton = static_cast<int>(rect.bottom * 0.9);
+	nLeft = static_cast<int>(rect.right * 0.1);
+	nRight = static_cast<int>(rect.right * 0.9);
 }
 
 CmfcplotView::~CmfcplotView()
@@ -53,6 +69,25 @@ BOOL CmfcplotView::PreCreateWindow(CREATESTRUCT& cs)
 	return CView::PreCreateWindow(cs);
 }
 
+//
+
+
+double CmfcplotView::LPxtoFPx(int x) {
+	return m_Xmin + (1.0 * x - nLeft) * (m_Xmax - m_Xmin) / (1.0 * nRight - nLeft);
+}
+
+int CmfcplotView::FPxtoLPx(double x) {
+	return nLeft + static_cast<int>((x - m_Xmin) * (1.0 * nRight - nLeft) / (m_Xmax - m_Xmin));
+}
+
+double CmfcplotView::LPytoFPy(int y) {
+	return m_Ymin + (1.0 * nButton - y) * (m_Ymax - m_Ymin) / (1.0 * nButton - nTop);
+}
+
+int CmfcplotView::FPytoLPy(double y) {
+	return nButton - static_cast<int>((y - m_Ymin) * (1.0 * nButton - nTop) / (m_Ymax - m_Ymin));
+}
+
 // CmfcplotView 绘图
 
 void CmfcplotView::OnDraw(CDC* pDC)
@@ -61,43 +96,120 @@ void CmfcplotView::OnDraw(CDC* pDC)
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
+	m_Xmin = pDoc->m_Xmin;
+	m_Xmax = pDoc->m_Xmax;
+	m_Ymin = pDoc->m_Ymin;
+	m_Ymax = pDoc->m_Ymax;
 	// TODO: 在此处为本机数据添加绘制代码
 	//CClientDC dc(this);
+	
+//	pDC->SetMapMode(MM_LOMETRIC);     //设置映射模式；	
+	//pDC->SetWindowOrg(0, 0);               //设置屏幕窗口原点；
 	CRect rect;
 	GetClientRect(&rect);
-	pDC->SetMapMode(MM_LOMETRIC);     //设置映射模式；	
-	pDC->SetWindowOrg(0, 0);               //设置屏幕窗口原点；
-	pDC->SetViewportOrg(CPoint(rect.right / 2, rect.bottom / 2));  //设置视口原点
-	
-	CPen pen1(PS_DOT, 1, RGB(100, 100, 100));           //创建笔，并调整坐标颜色
-	CPen* pOldPen = pDC->SelectObject(&pen1);           //更改笔并保存旧的笔
+	nTop = static_cast<int>(rect.bottom * 0.1);
+	nButton = static_cast<int>(rect.bottom * 0.9);
+	nLeft = static_cast<int>(rect.right * 0.1);
+	nRight = static_cast<int>(rect.right * 0.9);
+	pDC->MoveTo(nLeft, nTop);
+	pDC->LineTo(nLeft, nButton);
+	pDC->LineTo(nRight,nButton);
+	pDC->LineTo(nRight,nTop);
+	pDC->LineTo(nLeft, nTop);
 
-	pDC->MoveTo(0, 0);
-//	pDC->LineTo(100, );
+	//double m_Xmin = 0, m_Xmax = 10, m_Ymin = 0, m_Ymax = 10;
 
-/*	for (int i = -900; i <= 900; i += 50)
-	{
-		pDC->MoveTo(i, 500);
-		pDC->LineTo(i, -500);
+	//x坐标
+	int nX,nY;
+	for (nX = nLeft; nX < nRight; nX += 50) {
+		//pDC->TextOutW(nX-2, nButton+3, _T("11"));
+		CRect textRect(nX - 25, nButton + 1, nX + 25, nButton + 20);
+		CString xInfo;
+		xInfo.Format(_T("%.2f"),LPxtoFPx(nX));
+		pDC->DrawText(xInfo, &textRect, DT_SINGLELINE | DT_CENTER);
+		                                    //单行,上下左右居中
 	}
-	for (int j = -500; j <= 500; j += 50)
-	{
-		pDC->MoveTo(-900, j);
-		pDC->LineTo(900, j);
+	if (nX-nRight <= 25) {
+		CRect textRect(nRight, nButton + 1, nRight + 50, nButton + 20);
+		CString xInfo;
+		xInfo.Format(_T("%.2f"), LPxtoFPx(nRight));
+		pDC->DrawText(xInfo, &textRect, DT_SINGLELINE | DT_LEFT);
 	}
-	//pDC->TextOutW()
-	pDC->TextOutW(10, 500, _T("y"));     //标记y轴
-	pDC->TextOutW(870, 0, _T("x"));      //标记x轴
-	pDC->TextOutW(0, 0, _T("0"));        //标记坐标原点
-	pDC->TextOutW(-8, 510, _T("^"));
-	pDC->TextOutW(900, 25, _T(">"));
-	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));//创建笔，并调整坐标颜色
-	pOldPen = pDC->SelectObject(&pen);//更改笔并保存旧的笔
-	pDC->MoveTo(-900, 0);    //横坐标
-	pDC->LineTo(900, 0);
-	pDC->MoveTo(0, -500);    //纵坐标
-	pDC->LineTo(0, 500);*/
+
+	//y坐标
+	for (nY = nButton - 50; nY > nTop; nY -= 50) {
+		CRect textRect(nLeft - 50, nY-10, nLeft - 1, nY + 10);
+		CString yInfo;
+		yInfo.Format(_T("%.2f"), LPytoFPy(nY));
+		pDC->DrawText(yInfo, &textRect, DT_SINGLELINE | DT_CENTER);
+	}
+	if (nTop - nY <= 25) {
+		CRect textRect(nLeft - 50, nTop - 10, nLeft - 1, nTop + 10);
+		CString yInfo;
+		yInfo.Format(_T("%.2f"), LPytoFPy(nY));
+		pDC->DrawText(yInfo, &textRect, DT_SINGLELINE | DT_BOTTOM);
+	}
+
+
+	//  显示网格
+	if (pDoc->m_WillShowGrid) {
+		CPen pen1(PS_DOT, 1, RGB(100, 100, 100));           //创建笔，并调整坐标颜色
+		CPen *pOldPen = (CPen *)pDC->SelectObject(&pen1);
+		for (nX = nLeft+50; nX < nRight; nX += 50) {
+			pDC->MoveTo(nX, nTop);
+			pDC->LineTo(nX, nButton);
+		}
+		for (nY = nButton - 50; nY > nTop; nY -= 50) {
+			pDC->MoveTo(nLeft, nY);
+			pDC->LineTo(nRight, nY);
+		}
+		pDC->SelectObject(pOldPen);
+	}
+
+	// 显示坐标轴
+	if (pDoc->m_WillShowAxis) {
+		CPen pen2(PS_SOLID, 2, RGB(0, 0, 0));
+		CPen* pOldPen = (CPen*)pDC->SelectObject(&pen2);
+		int oX = FPxtoLPx(0);
+		int oY = FPytoLPy(0);
+		bool showY = oX >= nLeft && oX <= nRight;
+		bool showX = oY >= nTop && oY <= nButton;
+		if (showX) {
+			pDC->MoveTo(nLeft - 10, oY);
+			pDC->LineTo(nRight + 10, oY);
+		}
+		if (showY) {
+			pDC->MoveTo(oX, nButton + 10);
+			pDC->LineTo(oX, nTop - 10);
+		}
+		if (showX && showY) {
+			pDC->TextOutW(oX + 1, oY + 1, _T("O"));
+		}
+		//pDC->Polygon(1,1,1,1,1,1);
+		if (showX) {
+			pDC->MoveTo(nRight + 10, oY);
+			pDC->LineTo(nRight + 5, oY + 5);
+			pDC->MoveTo(nRight + 10, oY);
+			pDC->LineTo(nRight + 5, oY - 5);
+			pDC->TextOutW(nRight + 10, oY, _T("X轴"));
+		}
+		if (showY) {
+			pDC->MoveTo(oX, nTop - 10);
+			pDC->LineTo(oX - 5, nTop - 5);
+			pDC->MoveTo(oX, nTop - 10);
+			pDC->LineTo(oX + 5, nTop - 5);
+			pDC->TextOutW(oX + 5, nTop - 10, _T("Y轴"));
+		}
+		pDC->SelectObject(pOldPen);
+	}
+
 	
+	for (double i = -10; i <= 10; i += 0.1) {
+		if (i == -10) pDC->MoveTo(FPxtoLPx(i), FPytoLPy(sin(i)));
+		else pDC->LineTo(FPxtoLPx(i), FPytoLPy(sin(i)));
+	}
+	
+
 }
 
 
@@ -159,8 +271,49 @@ void CmfcplotView::OnMouseMove(UINT nFlags, CPoint point)
 	CStatusBar* pBar = (CStatusBar*)AfxGetApp()->m_pMainWnd->GetDescendantWindow(AFX_IDW_STATUS_BAR);
 	if (pBar) {
 		CString msg;
-		msg.Format(_T("(%d,%d)"), point.x, point.y);
+		if (point.x >= nLeft && point.x <= nRight && point.y >= nTop && point.y <= nButton)
+			msg.Format(_T("(%.1f,%.1f)"), LPxtoFPx(point.x), LPytoFPy(point.y));
+		else
+			msg = _T("(NaN,NaN)");
 		pBar->SetPaneText(1, msg);
+	}
+
+	if (isMoving==2) {
+		//	m_cursor = LoadCursor(NULL, IDC_SIZEALL);
+		::SetCursor(LoadCursor(NULL, IDC_SIZEALL));
+		CmfcplotDoc* pDoc = GetDocument();
+		double detx = LPxtoFPx(point.x) - LPxtoFPx(m_posStart.x);
+		pDoc->m_Xmin = tmp_Xmin - detx;
+		pDoc->m_Xmax = tmp_Xmax - detx;
+		double dety = LPytoFPy(point.y) - LPytoFPy(m_posStart.y);
+		pDoc->m_Ymin = tmp_Ymin - dety;
+		pDoc->m_Ymax = tmp_Ymax - dety;
+		//RedrawWindow();
+		CDC* pDC = GetDC();
+		//创建一个内存中的显示设备
+		CDC MemDC;
+		MemDC.CreateCompatibleDC(NULL);
+		//创建一个内存中的图像
+		CBitmap MemBitmap;
+		CRect rect;
+		GetClientRect(&rect);
+		MemBitmap.CreateCompatibleBitmap(pDC, rect.right, rect.bottom);
+		//指定内存显示设备在内存中的图像上画图
+		MemDC.SelectObject(&MemBitmap);
+		//先用一种颜色作为内存显示设备的背景色
+		MemDC.FillSolidRect(rect.left, rect.top, rect.right, rect.bottom, RGB(144, 144, 144));
+		//绘制坐标轴
+	
+		this->OnDraw(&MemDC);
+		//将内存中画好的图像直接拷贝到屏幕指定区域上
+		pDC->BitBlt(rect.left, rect.top, rect.right, rect.bottom, &MemDC, 0, 0, SRCCOPY);
+
+		//释放相关资源
+		ReleaseDC(pDC);
+
+	}
+	else if (isMoving == 1) {
+		::SetCursor(LoadCursor(NULL, IDC_HAND));
 	}
 
 	CView::OnMouseMove(nFlags, point);
@@ -174,4 +327,82 @@ void CmfcplotView::OnNormalFuncMenu()
 	if (dlg.DoModal() == IDOK) {
 
 	}
+}
+
+
+//void CmfcplotView::OnBiggerMenu()
+//{
+//	// TODO: 在此添加命令处理程序代码
+//	CmfcplotDoc* pDoc = GetDocument();
+//	ASSERT_VALID(pDoc);
+//	if (!pDoc)
+//		return;
+
+//	RedrawWindow();
+//}
+
+
+
+
+BOOL CmfcplotView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	//if (isMoving) {
+//		SetCursor(m_cursor);
+//		return TRUE;
+	//}
+	return CView::OnSetCursor(pWnd, nHitTest, message);
+}
+
+
+void CmfcplotView::OnMoveMenu()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (isMoving) {
+		isMoving = 0;
+	}
+	else {
+		isMoving = 1;
+		//m_cursor = LoadCursor(NULL, IDC_HAND);
+		::SetCursor(LoadCursor(NULL, IDC_HAND));
+	}
+}
+
+
+
+void CmfcplotView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	if (isMoving == 1) {
+	//	m_cursor = LoadCursor(NULL, IDC_SIZEALL);
+		isMoving = 2;
+		m_posStart = point;
+		CmfcplotDoc* pDoc = GetDocument();
+		tmp_Xmin = pDoc->m_Xmin;
+		tmp_Xmax = pDoc->m_Xmax;
+		tmp_Ymin = pDoc->m_Ymin;
+		tmp_Ymax = pDoc->m_Ymax;
+		::SetCursor(LoadCursor(NULL, IDC_SIZEALL));
+	}
+	CView::OnLButtonDown(nFlags, point);
+}
+
+
+void CmfcplotView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	if (isMoving == 2) {
+		isMoving = 1;
+		//m_cursor = LoadCursor(NULL, IDC_HAND);
+		::SetCursor(LoadCursor(NULL, IDC_HAND));
+		CmfcplotDoc* pDoc = GetDocument();
+		double detx = LPxtoFPx(point.x) - LPxtoFPx(m_posStart.x);
+		pDoc->m_Xmin = tmp_Xmin - detx;
+		pDoc->m_Xmax = tmp_Xmax - detx;
+		double dety = LPytoFPy(point.y) - LPytoFPy(m_posStart.y);
+		pDoc->m_Ymin = tmp_Ymin - dety;
+		pDoc->m_Ymax = tmp_Ymax - dety;
+		RedrawWindow();
+	}
+	CView::OnLButtonUp(nFlags, point);
 }

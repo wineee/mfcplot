@@ -26,13 +26,25 @@
 #define ID_TWO_FUNC_MENU                32779
 #define ID_DATA                         32780
 #define ID_DATA_FUNC_MENU               32781
+#define ID_32782                        32782
+#define ID_32783                        32783
+#define ID_AXIS_MENU                    32784
+#define ID_                             32785
+#define ID_GRID_MENU                    32786
+#define ID_32787                        32787
+#define ID_32788                        32788
+#define ID_32789                        32789
+#define ID_32790                        32790
+#define ID_BIGGER_MENU                  32791
+#define ID_SMALLER_MENU                 32792
+#define ID_MOVE_MENU                    32793
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        312
-#define _APS_NEXT_COMMAND_VALUE         32782
+#define _APS_NEXT_COMMAND_VALUE         32794
 #define _APS_NEXT_CONTROL_VALUE         1006
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

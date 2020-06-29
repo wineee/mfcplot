@@ -23,6 +23,12 @@
 IMPLEMENT_DYNCREATE(CmfcplotDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CmfcplotDoc, CDocument)
+	ON_COMMAND(ID_AXIS_MENU, &CmfcplotDoc::OnAxisMenu)
+	//ON_COMMAND(ID_GRID_MENU, &CmfcplotDoc::OnGridMenu)
+	//ON_UPDATE_COMMAND_UI(ID_GRID_MENU, &CmfcplotDoc::OnUpdateGridMenu)
+	ON_COMMAND(ID_GRID_MENU, &CmfcplotDoc::OnGridMenu)
+	ON_COMMAND(ID_SMALLER_MENU, &CmfcplotDoc::OnSmallerMenu)
+	ON_COMMAND(ID_BIGGER_MENU, &CmfcplotDoc::OnBiggerMenu)
 END_MESSAGE_MAP()
 
 
@@ -31,6 +37,13 @@ END_MESSAGE_MAP()
 CmfcplotDoc::CmfcplotDoc() noexcept
 {
 	// TODO: 在此添加一次性构造代码
+	m_WillShowGrid = true;
+	m_WillShowAxis = true;
+	m_Xmin = -10;
+	m_Xmax = 10;
+	m_Ymin = -1;
+	m_Ymax = 1;
+	//int nTop, nButton, nLeft, nRight;
 
 }
 
@@ -136,3 +149,46 @@ void CmfcplotDoc::Dump(CDumpContext& dc) const
 
 
 // CmfcplotDoc 命令
+
+
+void CmfcplotDoc::OnAxisMenu()
+{
+	// TODO: 在此添加命令处理程序代码
+	m_WillShowAxis = !m_WillShowAxis;
+	
+	this->UpdateAllViews(NULL);
+}
+
+void CmfcplotDoc::OnGridMenu()
+{
+	// TODO: 在此添加命令处理程序代码
+	m_WillShowGrid = !m_WillShowGrid;
+	this->UpdateAllViews(NULL);
+}
+
+
+
+void CmfcplotDoc::OnSmallerMenu()
+{
+	// TODO: 在此添加命令处理程序代码
+	double detx = (m_Xmax - m_Xmin) * 0.125;
+	m_Xmax += detx;
+	m_Xmin -= detx;
+	double dety = (m_Ymax - m_Ymin) * 0.125;
+	m_Ymax += dety;
+	m_Ymin -= dety;
+	UpdateAllViews(NULL);
+}
+
+
+void CmfcplotDoc::OnBiggerMenu()
+{
+	// TODO: 在此添加命令处理程序代码
+    double detx = (m_Xmax - m_Xmin) * 0.1;
+	m_Xmax -= detx;
+	m_Xmin += detx;
+	double dety = (m_Ymax - m_Ymin) * 0.1;
+	m_Ymax -= dety;
+	m_Ymin += dety;
+	UpdateAllViews(NULL);
+}

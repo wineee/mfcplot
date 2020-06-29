@@ -17,6 +17,18 @@ public:
 
 // 操作
 public:
+	double m_Xmin, m_Xmax, m_Ymin, m_Ymax;
+	int nTop, nButton, nLeft, nRight;
+	//HCURSOR m_cursor;
+	int isMoving;//0不拖动 1拖动模式 2正在拖动
+
+	double  tmp_Xmin, tmp_Xmax, tmp_Ymin, tmp_Ymax;
+	CPoint m_posStart;
+
+	double LPxtoFPx(int x);
+	int FPxtoLPx(double x);
+	double LPytoFPy(int y);
+	int FPytoLPy(double y); 
 
 // 重写
 public:
@@ -44,6 +56,11 @@ public:
 //	afx_msg void OnNcMouseMove(UINT nHitTest, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnNormalFuncMenu();
+//	afx_msg void OnBiggerMenu();
+	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
+	afx_msg void OnMoveMenu();
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // mfcplotView.cpp 中的调试版本
