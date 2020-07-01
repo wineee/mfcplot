@@ -12,7 +12,8 @@
 
 #include "mfcplotDoc.h"
 #include "mfcplotView.h"
-#include "CFuncDlg.h"
+#include <vector>
+using std::vector;
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -30,7 +31,7 @@ BEGIN_MESSAGE_MAP(CmfcplotView, CView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
 //	ON_WM_NCMOUSEMOVE()
 	ON_WM_MOUSEMOVE()
-	ON_COMMAND(ID_NORMAL_FUNC_MENU, &CmfcplotView::OnNormalFuncMenu)
+	//ON_COMMAND(ID_NORMAL_FUNC_MENU, &CmfcplotView::OnNormalFuncMenu)
 	//ON_COMMAND(ID_BIGGER_MENU, &CmfcplotView::OnBiggerMenu)
 	ON_WM_SETCURSOR()
 	ON_COMMAND(ID_MOVE_MENU, &CmfcplotView::OnMoveMenu)
@@ -51,10 +52,10 @@ CmfcplotView::CmfcplotView() noexcept
 	tmp_Ymax = m_Ymax = 1;
 	CRect rect;
 	GetClientRect(&rect);
-	nTop = static_cast<int>(rect.bottom * 0.1);
-	nButton = static_cast<int>(rect.bottom * 0.9);
-	nLeft = static_cast<int>(rect.right * 0.1);
-	nRight = static_cast<int>(rect.right * 0.9);
+	nTop = round(rect.bottom * 0.1);
+	nButton = round(rect.bottom * 0.9);
+	nLeft = round(rect.right * 0.1);
+	nRight = round(rect.right * 0.9);
 }
 
 CmfcplotView::~CmfcplotView()
@@ -77,7 +78,7 @@ double CmfcplotView::LPxtoFPx(int x) {
 }
 
 int CmfcplotView::FPxtoLPx(double x) {
-	return nLeft + static_cast<int>((x - m_Xmin) * (1.0 * nRight - nLeft) / (m_Xmax - m_Xmin));
+	return nLeft + round((x - m_Xmin) * (1.0 * nRight - nLeft) / (m_Xmax - m_Xmin));
 }
 
 double CmfcplotView::LPytoFPy(int y) {
@@ -85,7 +86,7 @@ double CmfcplotView::LPytoFPy(int y) {
 }
 
 int CmfcplotView::FPytoLPy(double y) {
-	return nButton - static_cast<int>((y - m_Ymin) * (1.0 * nButton - nTop) / (m_Ymax - m_Ymin));
+	return nButton - round((y - m_Ymin) * (1.0 * nButton - nTop) / (m_Ymax - m_Ymin));
 }
 
 // CmfcplotView 绘图
@@ -103,14 +104,12 @@ void CmfcplotView::OnDraw(CDC* pDC)
 	// TODO: 在此处为本机数据添加绘制代码
 	//CClientDC dc(this);
 	
-//	pDC->SetMapMode(MM_LOMETRIC);     //设置映射模式；	
-	//pDC->SetWindowOrg(0, 0);               //设置屏幕窗口原点；
 	CRect rect;
 	GetClientRect(&rect);
-	nTop = static_cast<int>(rect.bottom * 0.1);
-	nButton = static_cast<int>(rect.bottom * 0.9);
-	nLeft = static_cast<int>(rect.right * 0.1);
-	nRight = static_cast<int>(rect.right * 0.9);
+	nTop = round(rect.bottom * 0.1);
+	nButton = round(rect.bottom * 0.9);
+	nLeft = round(rect.right * 0.1);
+	nRight = round(rect.right * 0.9);
 	pDC->MoveTo(nLeft, nTop);
 	pDC->LineTo(nLeft, nButton);
 	pDC->LineTo(nRight,nButton);
@@ -132,7 +131,7 @@ void CmfcplotView::OnDraw(CDC* pDC)
 	if (nX-nRight <= 25) {
 		CRect textRect(nRight, nButton + 1, nRight + 50, nButton + 20);
 		CString xInfo;
-		xInfo.Format(_T("%.2f"), LPxtoFPx(nRight));
+		xInfo.Format(_T("%.2f"),m_Xmax);
 		pDC->DrawText(xInfo, &textRect, DT_SINGLELINE | DT_LEFT);
 	}
 
@@ -146,7 +145,7 @@ void CmfcplotView::OnDraw(CDC* pDC)
 	if (nTop - nY <= 25) {
 		CRect textRect(nLeft - 50, nTop - 10, nLeft - 1, nTop + 10);
 		CString yInfo;
-		yInfo.Format(_T("%.2f"), LPytoFPy(nY));
+		yInfo.Format(_T("%.2f"),m_Ymax);
 		pDC->DrawText(yInfo, &textRect, DT_SINGLELINE | DT_BOTTOM);
 	}
 
@@ -204,12 +203,22 @@ void CmfcplotView::OnDraw(CDC* pDC)
 	}
 
 	
-	for (double i = -10; i <= 10; i += 0.1) {
-		if (i == -10) pDC->MoveTo(FPxtoLPx(i), FPytoLPy(sin(i)));
-		else pDC->LineTo(FPxtoLPx(i), FPytoLPy(sin(i)));
-	}
 	
-
+	//vector<CPoint> vet = ;
+	bool shouldMov = true;
+	if (pDoc->m_FD)
+	for (auto dot : pDoc->m_FD->vetPoint) {
+		if (dot.first < m_Xmin || dot.first > m_Xmax || dot.second < m_Ymin || dot.second > m_Ymax) {
+			shouldMov = true;
+			continue;
+		}
+		if (shouldMov) {
+			pDC->MoveTo(FPxtoLPx(dot.first), FPytoLPy(dot.second));
+			shouldMov = false;
+		}
+		else 
+			pDC->LineTo(FPxtoLPx(dot.first), FPytoLPy(dot.second));
+	}
 }
 
 
@@ -320,14 +329,15 @@ void CmfcplotView::OnMouseMove(UINT nFlags, CPoint point)
 }
 
 
-void CmfcplotView::OnNormalFuncMenu()
-{
-	// TODO: 在此添加命令处理程序代码
-	CFuncDlg dlg;
-	if (dlg.DoModal() == IDOK) {
 
-	}
-}
+//void CmfcplotView::OnNormalFuncMenu()
+//{
+//	// TODO: 在此添加命令处理程序代码
+//	CFuncDlg dlg;
+//	if (dlg.DoModal() == IDOK) {
+//
+//	}
+//}
 
 
 //void CmfcplotView::OnBiggerMenu()
@@ -347,10 +357,10 @@ void CmfcplotView::OnNormalFuncMenu()
 BOOL CmfcplotView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	//if (isMoving) {
+	if (isMoving) {
 //		SetCursor(m_cursor);
-//		return TRUE;
-	//}
+		return TRUE;
+	}
 	return CView::OnSetCursor(pWnd, nHitTest, message);
 }
 

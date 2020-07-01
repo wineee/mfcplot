@@ -11,8 +11,9 @@
 #endif
 
 #include "mfcplotDoc.h"
-
+#include <utility>
 #include <propkey.h>
+#include "CFuncDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -29,6 +30,7 @@ BEGIN_MESSAGE_MAP(CmfcplotDoc, CDocument)
 	ON_COMMAND(ID_GRID_MENU, &CmfcplotDoc::OnGridMenu)
 	ON_COMMAND(ID_SMALLER_MENU, &CmfcplotDoc::OnSmallerMenu)
 	ON_COMMAND(ID_BIGGER_MENU, &CmfcplotDoc::OnBiggerMenu)
+	ON_COMMAND(ID_NORMAL_FUNC_MENU, &CmfcplotDoc::OnNormalFuncMenu)
 END_MESSAGE_MAP()
 
 
@@ -190,5 +192,25 @@ void CmfcplotDoc::OnBiggerMenu()
 	double dety = (m_Ymax - m_Ymin) * 0.1;
 	m_Ymax -= dety;
 	m_Ymin += dety;
+	UpdateAllViews(NULL);
+}
+
+
+void CmfcplotDoc::OnNormalFuncMenu()
+{
+	// TODO: 在此添加命令处理程序代码
+	CFuncDlg dlg;
+	if (dlg.DoModal() == IDOK) 
+	{
+		if (m_FD) delete m_FD;
+		m_FD = new NormalFD(dlg.m_strEquation,m_Xmin,m_Xmax,1000);
+		if (m_FD->CalcList() == false) {
+			AfxMessageBox(_T("请检查方程是否完整！"));
+		}
+		else {
+			if (m_FD->minY < m_Ymin) m_Ymin = m_FD->minY;
+			if (m_FD->maxY > m_Ymax) m_Ymax = m_FD->maxY;
+		}
+	}
 	UpdateAllViews(NULL);
 }

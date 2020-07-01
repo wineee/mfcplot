@@ -2,7 +2,7 @@
 // mfcplotDoc.h: CmfcplotDoc 类的接口
 //
 
-
+#include "FuncData.h"
 #pragma once
 
 
@@ -18,6 +18,7 @@ public:
 	bool m_WillShowAxis;
 	double m_Xmin, m_Xmax, m_Ymin, m_Ymax;
 	//int nTop, nButton, nLeft, nRight;
+	FuncData *m_FD;
 // 操作
 public:
 	
@@ -55,4 +56,5 @@ public:
 	afx_msg void OnGridMenu();
 	afx_msg void OnSmallerMenu();
 	afx_msg void OnBiggerMenu();
+	afx_msg void OnNormalFuncMenu();
 };

@@ -1,17 +1,37 @@
 ﻿#pragma once
-
+#include <vector>
+#include <utility>
+using std::pair;
+using std::vector;
 // FuncData 命令目标
 
 class FuncData : public CObject
 {
 public:
 	CString m_Equation;
-	double minX, maxX, stepX;//枚举范围
-	double GetY(int x);
+	double minX, maxX;
+	double maxY, minY;
+	int stepX;//枚举步数
+	CPen m_pen;
+	COLORREF m_color;
+	virtual double GetY(double xVal, bool& succ) = 0;
+	virtual bool CalcList() = 0;
 	//yang shi
+	vector<pair<double,double> > vetPoint;
 	FuncData();
-	FuncData(CString Equation);
+	FuncData(CString Equation,double minX,double maxX,int stepX);
 	virtual ~FuncData();
 };
 
+
+class NormalFD : public FuncData
+{
+public:
+	virtual double GetY(double xVal, bool& succ);
+	virtual bool CalcList();
+
+	NormalFD();
+	NormalFD(CString Equation, double minX, double maxX, int stepX);
+
+};
 

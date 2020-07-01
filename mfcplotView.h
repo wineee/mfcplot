@@ -55,7 +55,7 @@ protected:
 public:
 //	afx_msg void OnNcMouseMove(UINT nHitTest, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	afx_msg void OnNormalFuncMenu();
+//	afx_msg void OnNormalFuncMenu();
 //	afx_msg void OnBiggerMenu();
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg void OnMoveMenu();
