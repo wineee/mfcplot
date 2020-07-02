@@ -12,7 +12,7 @@ bool IsOpt(char c) {
 }
 
 bool IsNum(char c) {
-	return c >= '0' && c <= '9' || c == 'e'  || c == _T('¦Ð');
+	return c >= '0' && c <= '9' || c == 'e'  || c == 'p';
 }
 
 double GetNum(CString& Eq, int& i, char xKey, double xVal)
@@ -23,7 +23,7 @@ double GetNum(CString& Eq, int& i, char xKey, double xVal)
 		i++;
 	}
 	
-	if (i < Eq.GetLength() && Eq[i] == _T('¦Ð')) {
+	if (i < Eq.GetLength() && Eq[i] == 'p') {
 		i++;
 		return flag * pi;
 	 }

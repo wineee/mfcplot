@@ -16,9 +16,12 @@ protected: // 仅从序列化创建
 public:
 	bool m_WillShowGrid;
 	bool m_WillShowAxis;
+	bool m_WillShowEdge;
+	bool m_SingelMode;
 	double m_Xmin, m_Xmax, m_Ymin, m_Ymax;
 	//int nTop, nButton, nLeft, nRight;
 	FuncData *m_FD;
+	CObList m_List;
 // 操作
 public:
 	
@@ -57,4 +60,13 @@ public:
 	afx_msg void OnSmallerMenu();
 	afx_msg void OnBiggerMenu();
 	afx_msg void OnNormalFuncMenu();
+	afx_msg void OnUpdateEdgeMenu(CCmdUI* pCmdUI);
+	afx_msg void OnEdgeMenu();
+	afx_msg void OnMenuSetXyrange();
+	afx_msg void OnFuncMode();
+	afx_msg void OnUpdateFuncMode(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateAxisMenu(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateGridMenu(CCmdUI* pCmdUI);
+//	afx_msg void OnMoveMenu();
+//	afx_msg void OnUpdateMoveMenu(CCmdUI* pCmdUI);
 };

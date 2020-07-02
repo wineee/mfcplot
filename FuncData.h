@@ -12,14 +12,15 @@ public:
 	double minX, maxX;
 	double maxY, minY;
 	int stepX;//枚举步数
-	CPen m_pen;
+	int m_penWidth;
+	int m_penType;
 	COLORREF m_color;
 	virtual double GetY(double xVal, bool& succ) = 0;
 	virtual bool CalcList() = 0;
 	//yang shi
 	vector<pair<double,double> > vetPoint;
 	FuncData();
-	FuncData(CString Equation,double minX,double maxX,int stepX);
+	FuncData(CString Equation,double minX,double maxX,int stepX,COLORREF color, int penWidth,int penType);
 	virtual ~FuncData();
 };
 
@@ -31,7 +32,9 @@ public:
 	virtual bool CalcList();
 
 	NormalFD();
-	NormalFD(CString Equation, double minX, double maxX, int stepX);
+	NormalFD(CString Equation, double minX, double maxX, int stepX, COLORREF color, int penWidth,int penType);
 
 };
+
+
 

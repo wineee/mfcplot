@@ -14,6 +14,8 @@
 #include <utility>
 #include <propkey.h>
 #include "CFuncDlg.h"
+#include "CNormalFuncDlg.h"
+#include "CSetXYrangeDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -31,6 +33,15 @@ BEGIN_MESSAGE_MAP(CmfcplotDoc, CDocument)
 	ON_COMMAND(ID_SMALLER_MENU, &CmfcplotDoc::OnSmallerMenu)
 	ON_COMMAND(ID_BIGGER_MENU, &CmfcplotDoc::OnBiggerMenu)
 	ON_COMMAND(ID_NORMAL_FUNC_MENU, &CmfcplotDoc::OnNormalFuncMenu)
+	ON_UPDATE_COMMAND_UI(ID_EDGE_MENU, &CmfcplotDoc::OnUpdateEdgeMenu)
+	ON_COMMAND(ID_EDGE_MENU, &CmfcplotDoc::OnEdgeMenu)
+	ON_COMMAND(ID_Menu_SET_XYRANGE, &CmfcplotDoc::OnMenuSetXyrange)
+	ON_COMMAND(ID_FUNC_MODE, &CmfcplotDoc::OnFuncMode)
+	ON_UPDATE_COMMAND_UI(ID_FUNC_MODE, &CmfcplotDoc::OnUpdateFuncMode)
+	ON_UPDATE_COMMAND_UI(ID_AXIS_MENU, &CmfcplotDoc::OnUpdateAxisMenu)
+	ON_UPDATE_COMMAND_UI(ID_GRID_MENU, &CmfcplotDoc::OnUpdateGridMenu)
+	//ON_COMMAND(ID_MOVE_MENU, &CmfcplotDoc::OnMoveMenu)
+	//ON_UPDATE_COMMAND_UI(ID_MOVE_MENU, &CmfcplotDoc::OnUpdateMoveMenu)
 END_MESSAGE_MAP()
 
 
@@ -41,6 +52,8 @@ CmfcplotDoc::CmfcplotDoc() noexcept
 	// TODO: 在此添加一次性构造代码
 	m_WillShowGrid = true;
 	m_WillShowAxis = true;
+	m_WillShowEdge = true;
+	m_SingelMode = true;
 	m_Xmin = -10;
 	m_Xmax = 10;
 	m_Ymin = -1;
@@ -199,18 +212,101 @@ void CmfcplotDoc::OnBiggerMenu()
 void CmfcplotDoc::OnNormalFuncMenu()
 {
 	// TODO: 在此添加命令处理程序代码
-	CFuncDlg dlg;
+	//CFuncDlg dlg;
+	CNormalFuncDlg dlg(m_Xmin, m_Xmax, nullptr);
+//	
 	if (dlg.DoModal() == IDOK) 
 	{
-		if (m_FD) delete m_FD;
-		m_FD = new NormalFD(dlg.m_strEquation,m_Xmin,m_Xmax,1000);
+		if (m_SingelMode) {
+			if(m_FD) delete m_FD;
+			m_List.RemoveAll();
+		}
+		m_FD = new NormalFD(dlg.m_sEquation, dlg.m_Xmin, dlg.m_Xmax, dlg.m_stepX, dlg.m_color, dlg.m_penWidth, dlg.m_penType);
 		if (m_FD->CalcList() == false) {
 			AfxMessageBox(_T("请检查方程是否完整！"));
 		}
 		else {
 			if (m_FD->minY < m_Ymin) m_Ymin = m_FD->minY;
 			if (m_FD->maxY > m_Ymax) m_Ymax = m_FD->maxY;
+			m_List.AddTail(m_FD);
 		}
+
 	}
 	UpdateAllViews(NULL);
 }
+
+
+void CmfcplotDoc::OnUpdateEdgeMenu(CCmdUI* pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(m_WillShowEdge);
+	
+}
+
+
+void CmfcplotDoc::OnEdgeMenu()
+{
+	// TODO: 在此添加命令处理程序代码
+	m_WillShowEdge = !m_WillShowEdge;
+	UpdateAllViews(NULL);
+}
+
+
+void CmfcplotDoc::OnMenuSetXyrange()
+{
+	// TODO: 在此添加命令处理程序代码
+	CSetXYrangeDlg dlg(m_Xmin, m_Xmax, m_Ymin, m_Ymax, nullptr);
+	if (dlg.DoModal()) {
+		if (dlg.m_Xmin >= dlg.m_Xmax || dlg.m_Ymin >= dlg.m_Ymax)
+			AfxMessageBox(_T("输入不合法！"));
+		else {
+			m_Xmin = dlg.m_Xmin;
+			m_Xmax = dlg.m_Xmax;
+			m_Ymin = dlg.m_Ymin;
+			m_Ymax = dlg.m_Ymax;
+			UpdateAllViews(NULL);
+		}
+	}
+}
+
+
+void CmfcplotDoc::OnFuncMode()
+{
+	// TODO: 在此添加命令处理程序代码
+	m_SingelMode = !m_SingelMode;
+}
+
+
+void CmfcplotDoc::OnUpdateFuncMode(CCmdUI* pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(m_SingelMode);
+}
+
+
+void CmfcplotDoc::OnUpdateAxisMenu(CCmdUI* pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(m_WillShowAxis);
+}
+
+
+void CmfcplotDoc::OnUpdateGridMenu(CCmdUI* pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(m_WillShowGrid);
+}
+
+
+//void CmfcplotDoc::OnMoveMenu()
+//{
+//	// TODO: 在此添加命令处理程序代码
+//	pC
+//}
+
+
+//void CmfcplotDoc::OnUpdateMoveMenu(CCmdUI* pCmdUI)
+//{
+//	// TODO: 在此添加命令更新用户界面处理程序代码
+//	pCmdUI->SetCheck(isMoving);
+//}

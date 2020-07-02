@@ -37,6 +37,11 @@ BEGIN_MESSAGE_MAP(CmfcplotView, CView)
 	ON_COMMAND(ID_MOVE_MENU, &CmfcplotView::OnMoveMenu)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
+//	ON_COMMAND(ID_FUNC_MODE, &CmfcplotView::OnFuncMode)
+//ON_UPDATE_COMMAND_UI(ID_FUNC_MODE, &CmfcplotView::OnUpdateFuncMode)
+//ON_UPDATE_COMMAND_UI(ID_FUNC_MODE, &CmfcplotView::OnUpdateFuncMode)
+//ON_UPDATE_COMMAND_UI(ID_EDGE_MENU, &CmfcplotView::OnUpdateEdgeMenu)
+ON_UPDATE_COMMAND_UI(ID_MOVE_MENU, &CmfcplotView::OnUpdateMoveMenu)
 END_MESSAGE_MAP()
 
 // CmfcplotView 构造/析构
@@ -52,10 +57,10 @@ CmfcplotView::CmfcplotView() noexcept
 	tmp_Ymax = m_Ymax = 1;
 	CRect rect;
 	GetClientRect(&rect);
-	nTop = round(rect.bottom * 0.1);
-	nButton = round(rect.bottom * 0.9);
-	nLeft = round(rect.right * 0.1);
-	nRight = round(rect.right * 0.9);
+	nTop = (int)round(rect.bottom * 0.1);
+	nButton = (int)round(rect.bottom * 0.9);
+	nLeft = (int)round(rect.right * 0.1);
+	nRight = (int)round(rect.right * 0.9);
 }
 
 CmfcplotView::~CmfcplotView()
@@ -78,7 +83,7 @@ double CmfcplotView::LPxtoFPx(int x) {
 }
 
 int CmfcplotView::FPxtoLPx(double x) {
-	return nLeft + round((x - m_Xmin) * (1.0 * nRight - nLeft) / (m_Xmax - m_Xmin));
+	return nLeft + (int)round((x - m_Xmin) * (1.0 * nRight - nLeft) / (m_Xmax - m_Xmin));
 }
 
 double CmfcplotView::LPytoFPy(int y) {
@@ -86,7 +91,7 @@ double CmfcplotView::LPytoFPy(int y) {
 }
 
 int CmfcplotView::FPytoLPy(double y) {
-	return nButton - round((y - m_Ymin) * (1.0 * nButton - nTop) / (m_Ymax - m_Ymin));
+	return nButton - (int)round((y - m_Ymin) * (1.0 * nButton - nTop) / (m_Ymax - m_Ymin));
 }
 
 // CmfcplotView 绘图
@@ -106,16 +111,18 @@ void CmfcplotView::OnDraw(CDC* pDC)
 	
 	CRect rect;
 	GetClientRect(&rect);
-	nTop = round(rect.bottom * 0.1);
-	nButton = round(rect.bottom * 0.9);
-	nLeft = round(rect.right * 0.1);
-	nRight = round(rect.right * 0.9);
-	pDC->MoveTo(nLeft, nTop);
-	pDC->LineTo(nLeft, nButton);
-	pDC->LineTo(nRight,nButton);
-	pDC->LineTo(nRight,nTop);
-	pDC->LineTo(nLeft, nTop);
+	nTop = (int)round(rect.bottom * 0.1);
+	nButton = (int)round(rect.bottom * 0.9);
+	nLeft = (int)round(rect.right * 0.1);
+	nRight = (int)round(rect.right * 0.9);
 
+	if (pDoc->m_WillShowEdge) {
+		pDC->MoveTo(nLeft, nTop);
+		pDC->LineTo(nLeft, nButton);
+		pDC->LineTo(nRight, nButton);
+		pDC->LineTo(nRight, nTop);
+		pDC->LineTo(nLeft, nTop);
+	}
 	//double m_Xmin = 0, m_Xmax = 10, m_Ymin = 0, m_Ymax = 10;
 
 	//x坐标
@@ -152,8 +159,8 @@ void CmfcplotView::OnDraw(CDC* pDC)
 
 	//  显示网格
 	if (pDoc->m_WillShowGrid) {
-		CPen pen1(PS_DOT, 1, RGB(100, 100, 100));           //创建笔，并调整坐标颜色
-		CPen *pOldPen = (CPen *)pDC->SelectObject(&pen1);
+		CPen pen(PS_DOT, 1, RGB(100, 100, 100));           //创建笔，并调整坐标颜色
+		CPen *pOldPen = (CPen *)pDC->SelectObject(&pen);
 		for (nX = nLeft+50; nX < nRight; nX += 50) {
 			pDC->MoveTo(nX, nTop);
 			pDC->LineTo(nX, nButton);
@@ -167,8 +174,8 @@ void CmfcplotView::OnDraw(CDC* pDC)
 
 	// 显示坐标轴
 	if (pDoc->m_WillShowAxis) {
-		CPen pen2(PS_SOLID, 2, RGB(0, 0, 0));
-		CPen* pOldPen = (CPen*)pDC->SelectObject(&pen2);
+		CPen pen(PS_SOLID, 2, RGB(0, 0, 0));
+		CPen* pOldPen = (CPen*)pDC->SelectObject(&pen);
 		int oX = FPxtoLPx(0);
 		int oY = FPytoLPy(0);
 		bool showY = oX >= nLeft && oX <= nRight;
@@ -205,19 +212,45 @@ void CmfcplotView::OnDraw(CDC* pDC)
 	
 	
 	//vector<CPoint> vet = ;
-	bool shouldMov = true;
-	if (pDoc->m_FD)
-	for (auto dot : pDoc->m_FD->vetPoint) {
-		if (dot.first < m_Xmin || dot.first > m_Xmax || dot.second < m_Ymin || dot.second > m_Ymax) {
-			shouldMov = true;
-			continue;
+	/*
+	if (pDoc->m_FD) {
+		CPen pen(pDoc->m_FD->m_penType, pDoc->m_FD->m_penWidth, pDoc->m_FD->m_color);
+		CPen* pOldPen = (CPen*)pDC->SelectObject(&pen);
+		for (auto dot : pDoc->m_FD->vetPoint) {
+			if (dot.first < m_Xmin || dot.first > m_Xmax || dot.second < m_Ymin || dot.second > m_Ymax || dot.second != dot.second) {
+				shouldMov = true;
+				continue;
+			}
+			if (shouldMov) {
+				pDC->MoveTo(FPxtoLPx(dot.first), FPytoLPy(dot.second));
+				shouldMov = false;
+			}
+			else
+				pDC->LineTo(FPxtoLPx(dot.first), FPytoLPy(dot.second));
 		}
-		if (shouldMov) {
-			pDC->MoveTo(FPxtoLPx(dot.first), FPytoLPy(dot.second));
-			shouldMov = false;
+		pDC->SelectObject(pOldPen);
+	}*/
+
+	POSITION p = pDoc->m_List.GetHeadPosition();
+	while (p != nullptr) {
+		bool shouldMov = true;
+		FuncData* tmpFD = (FuncData*)pDoc->m_List.GetNext(p);
+		CPen pen(tmpFD->m_penType, tmpFD->m_penWidth, tmpFD->m_color);
+		CPen* pOldPen = (CPen*)pDC->SelectObject(&pen);
+		for (auto dot : tmpFD->vetPoint) {
+			if (dot.first < m_Xmin || dot.first > m_Xmax || dot.second < m_Ymin || dot.second > m_Ymax || dot.second != dot.second) {
+				shouldMov = true;
+				continue;
+			}
+			if (shouldMov) {
+				pDC->MoveTo(FPxtoLPx(dot.first), FPytoLPy(dot.second));
+				shouldMov = false;
+			}
+			else
+				pDC->LineTo(FPxtoLPx(dot.first), FPytoLPy(dot.second));
 		}
-		else 
-			pDC->LineTo(FPxtoLPx(dot.first), FPytoLPy(dot.second));
+		pDC->SelectObject(pOldPen);
+
 	}
 }
 
@@ -263,14 +296,6 @@ CmfcplotDoc* CmfcplotView::GetDocument() const // 非调试版本是内联的
 
 
 // CmfcplotView 消息处理程序
-
-
-//void CmfcplotView::OnNcMouseMove(UINT nHitTest, CPoint point)
-//{
-//	// TODO: 在此添加消息处理程序代码和/或调用默认值
-//
-//	CView::OnNcMouseMove(nHitTest, point);
-//}
 
 
 void CmfcplotView::OnMouseMove(UINT nFlags, CPoint point)
@@ -383,6 +408,7 @@ void CmfcplotView::OnMoveMenu()
 void CmfcplotView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	SetCapture();
 	if (isMoving == 1) {
 	//	m_cursor = LoadCursor(NULL, IDC_SIZEALL);
 		isMoving = 2;
@@ -414,5 +440,28 @@ void CmfcplotView::OnLButtonUp(UINT nFlags, CPoint point)
 		pDoc->m_Ymax = tmp_Ymax - dety;
 		RedrawWindow();
 	}
+	ReleaseCapture();
 	CView::OnLButtonUp(nFlags, point);
+}
+
+
+
+//void CmfcplotView::OnUpdateFuncMode(CCmdUI* pCmdUI)
+//{
+//	// TODO: 在此添加命令更新用户界面处理程序代码
+//	pCmdUI->SetCheck(3);
+//}
+
+
+//void CmfcplotView::OnUpdateEdgeMenu(CCmdUI* pCmdUI)
+//{
+//	// TODO: 在此添加命令更新用户界面处理程序代码
+//
+//}
+
+
+void CmfcplotView::OnUpdateMoveMenu(CCmdUI* pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(isMoving!=0);
 }

@@ -14,16 +14,19 @@ FuncData::FuncData()
 {
 	minX = maxX = stepX = 0;
 	maxY = minY = 0;
+	m_penType = PS_SOLID;
+	m_penWidth = 1;
+	m_color = RGB(0, 0, 0);
 }
 
 FuncData::~FuncData()
 {
 }
 
-FuncData::FuncData(CString Equation, double min_X, double max_X, int step_X) :
-	m_Equation(Equation), minX(min_X), maxX(max_X), stepX(step_X)
+FuncData::FuncData(CString Equation, double min_X, double max_X, int step_X, COLORREF color, int penWidth, int penType) :
+	m_Equation(Equation), minX(min_X), maxX(max_X), stepX(step_X), m_color(color), m_penWidth(penWidth),m_penType(penType)
 {
-
+	maxY = minY = 0;
 }
 
 // FuncData 成员函数
@@ -37,8 +40,8 @@ NormalFD::NormalFD()
 
 }
 
-NormalFD::NormalFD(CString Equation, double min_X, double max_X, int step_X) :
-	FuncData(Equation, min_X, max_X, step_X)
+NormalFD::NormalFD(CString Equation, double min_X, double max_X, int step_X, COLORREF color, int penWidth, int penType) :
+	FuncData(Equation, min_X, max_X, step_X, color, penWidth, penType)
 {
 
 }

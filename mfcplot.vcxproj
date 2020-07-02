@@ -185,6 +185,8 @@
   <ItemGroup>
     <ClInclude Include="CalculatorFunc.h" />
     <ClInclude Include="CFuncDlg.h" />
+    <ClInclude Include="CNormalFuncDlg.h" />
+    <ClInclude Include="CSetXYrangeDlg.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="FuncData.h" />
     <ClInclude Include="MainFrm.h" />
@@ -198,6 +200,8 @@
   <ItemGroup>
     <ClCompile Include="CalculatorFunc.cpp" />
     <ClCompile Include="CFuncDlg.cpp" />
+    <ClCompile Include="CNormalFuncDlg.cpp" />
+    <ClCompile Include="CSetXYrangeDlg.cpp" />
     <ClCompile Include="FuncData.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="mfcplot.cpp" />

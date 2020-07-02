@@ -146,8 +146,6 @@ void CFuncDlg::OnBnClickedButton8()
 }
 
 
-
-
 void CFuncDlg::OnBnClickedButton9()
 {
 	// TODO: 在此添加控件通知处理程序代码
@@ -161,7 +159,7 @@ void CFuncDlg::OnBnClickedButtonPi()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	UpdateData();
-	m_strEquation += "π";
+	m_strEquation += "p";
 	UpdateData(false);
 }
 
@@ -381,7 +379,7 @@ void CFuncDlg::OnBnClickedButtonFloor()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	UpdateData();
-	m_strEquation += "floor";
+	m_strEquation += "floor(";
 	UpdateData(false);
 }
 
@@ -390,7 +388,7 @@ void CFuncDlg::OnBnClickedButtonCeiling()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	UpdateData();
-	m_strEquation += "ceil";
+	m_strEquation += "ceil(";
 	UpdateData(false);
 }
 

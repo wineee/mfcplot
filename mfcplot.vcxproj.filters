@@ -48,6 +48,12 @@
     <ClInclude Include="FuncData.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CNormalFuncDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSetXYrangeDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mfcplot.cpp">
@@ -72,6 +78,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="FuncData.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CNormalFuncDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CSetXYrangeDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
