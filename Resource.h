@@ -10,6 +10,9 @@
 #define IDD_NORMALFUNC_DIALOG           310
 #define IDD_DIALOG_NORMALFUNC           315
 #define IDD_DIALOG_SET_RANGE            318
+#define IDD_DIALOG_POLARFUNC            319
+#define IDD_DIALOG_TWOFUNC              320
+#define IDD_DIALOG_DATAFUNC             324
 #define IDC_EDIT                        1000
 #define IDC_EQUATION_EDIT               1000
 #define IDC_BUTTON_1                    1001
@@ -36,11 +39,14 @@
 #define IDC_EDIT1                       1014
 #define IDC_BUTTON_MUL                  1015
 #define IDC_EDIT5                       1015
+#define IDC_EDIT_FUNC2                  1015
 #define IDC_BUTTON_DIV                  1016
 #define IDC_COMBO_LINETYPE              1016
 #define IDC_EDIT6                       1016
 #define IDC_BUTTON_DOT                  1017
 #define IDC_EDIT7                       1017
+#define IDC_BUTTON_SETFUNC2             1017
+#define IDC_BUTTON_READDATA             1017
 #define IDC_BUTTON_ABS                  1018
 #define IDC_BUTTON_SIN                  1020
 #define IDC_BUTTON_COS                  1021
@@ -95,9 +101,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        320
+#define _APS_NEXT_RESOURCE_VALUE        327
 #define _APS_NEXT_COMMAND_VALUE         32808
-#define _APS_NEXT_CONTROL_VALUE         1017
+#define _APS_NEXT_CONTROL_VALUE         1018
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

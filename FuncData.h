@@ -36,5 +36,33 @@ public:
 
 };
 
+class PolarFD : public FuncData
+{
+public:
+	virtual double GetY(double sVal, bool& succ);
+	virtual bool CalcList();
 
+	PolarFD();
+	PolarFD(CString Equation, double minTh, double maxTh, int stepTh, COLORREF color, int penWidth, int penType);
+};
 
+class TwoFD : public FuncData
+{
+public:
+	CString m_EquationY;
+	double GetX(double tVal, bool& succ);
+	virtual double GetY(double tVal, bool& succ);
+	virtual bool CalcList();
+
+	TwoFD();
+	TwoFD(CString Equation_X, CString Equation_Y,double minX, double maxX, int stepX, COLORREF color, int penWidth, int penType);
+};
+
+class DataFD : public FuncData
+{
+public:
+	virtual double GetY(double tVal, bool& succ);
+	virtual bool CalcList();
+	DataFD();
+	DataFD(vector<double> &vetX, vector<double> &vetY);
+};

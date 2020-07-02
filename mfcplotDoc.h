@@ -69,4 +69,7 @@ public:
 	afx_msg void OnUpdateGridMenu(CCmdUI* pCmdUI);
 //	afx_msg void OnMoveMenu();
 //	afx_msg void OnUpdateMoveMenu(CCmdUI* pCmdUI);
+	afx_msg void OnPolarFuncMenu();
+	afx_msg void OnTwoFuncMenu();
+	afx_msg void OnDataFuncMenu();
 };

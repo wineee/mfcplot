@@ -54,6 +54,15 @@
     <ClInclude Include="CSetXYrangeDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CPolarFuncDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CTwoFuncDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDataFuncDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mfcplot.cpp">
@@ -84,6 +93,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CSetXYrangeDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CPolarFuncDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CTwoFuncDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CDataFuncDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

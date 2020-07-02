@@ -15,7 +15,10 @@
 #include <propkey.h>
 #include "CFuncDlg.h"
 #include "CNormalFuncDlg.h"
+#include "CPolarFuncDlg.h"
 #include "CSetXYrangeDlg.h"
+#include "CTwoFuncDlg.h"
+#include "CDataFuncDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -42,6 +45,9 @@ BEGIN_MESSAGE_MAP(CmfcplotDoc, CDocument)
 	ON_UPDATE_COMMAND_UI(ID_GRID_MENU, &CmfcplotDoc::OnUpdateGridMenu)
 	//ON_COMMAND(ID_MOVE_MENU, &CmfcplotDoc::OnMoveMenu)
 	//ON_UPDATE_COMMAND_UI(ID_MOVE_MENU, &CmfcplotDoc::OnUpdateMoveMenu)
+	ON_COMMAND(ID_POLAR_FUNC_MENU, &CmfcplotDoc::OnPolarFuncMenu)
+	ON_COMMAND(ID_TWO_FUNC_MENU, &CmfcplotDoc::OnTwoFuncMenu)
+	ON_COMMAND(ID_DATA_FUNC_MENU, &CmfcplotDoc::OnDataFuncMenu)
 END_MESSAGE_MAP()
 
 
@@ -209,32 +215,6 @@ void CmfcplotDoc::OnBiggerMenu()
 }
 
 
-void CmfcplotDoc::OnNormalFuncMenu()
-{
-	// TODO: 在此添加命令处理程序代码
-	//CFuncDlg dlg;
-	CNormalFuncDlg dlg(m_Xmin, m_Xmax, nullptr);
-//	
-	if (dlg.DoModal() == IDOK) 
-	{
-		if (m_SingelMode) {
-			if(m_FD) delete m_FD;
-			m_List.RemoveAll();
-		}
-		m_FD = new NormalFD(dlg.m_sEquation, dlg.m_Xmin, dlg.m_Xmax, dlg.m_stepX, dlg.m_color, dlg.m_penWidth, dlg.m_penType);
-		if (m_FD->CalcList() == false) {
-			AfxMessageBox(_T("请检查方程是否完整！"));
-		}
-		else {
-			if (m_FD->minY < m_Ymin) m_Ymin = m_FD->minY;
-			if (m_FD->maxY > m_Ymax) m_Ymax = m_FD->maxY;
-			m_List.AddTail(m_FD);
-		}
-
-	}
-	UpdateAllViews(NULL);
-}
-
 
 void CmfcplotDoc::OnUpdateEdgeMenu(CCmdUI* pCmdUI)
 {
@@ -297,16 +277,103 @@ void CmfcplotDoc::OnUpdateGridMenu(CCmdUI* pCmdUI)
 	pCmdUI->SetCheck(m_WillShowGrid);
 }
 
+void CmfcplotDoc::OnNormalFuncMenu()
+{
+	// TODO: 在此添加命令处理程序代码
+	//CFuncDlg dlg;
+	CNormalFuncDlg dlg(m_Xmin, m_Xmax, nullptr);
+	//	
+	if (dlg.DoModal() == IDOK)
+	{
+		if (m_SingelMode) {
+			if (m_FD) delete m_FD;
+			m_List.RemoveAll();
+		}
+		m_FD = new NormalFD(dlg.m_sEquation, dlg.m_Xmin, dlg.m_Xmax, dlg.m_stepX, dlg.m_color, dlg.m_penWidth, dlg.m_penType);
+		if (m_FD->CalcList() == false) {
+			AfxMessageBox(_T("请检查方程是否完整！"));
+		}
+		else {
+			if (m_FD->minY < m_Ymin) m_Ymin = m_FD->minY;
+			if (m_FD->maxY > m_Ymax) m_Ymax = m_FD->maxY;
+			m_List.AddTail(m_FD);
+		}
 
-//void CmfcplotDoc::OnMoveMenu()
-//{
-//	// TODO: 在此添加命令处理程序代码
-//	pC
-//}
+	}
+	UpdateAllViews(NULL);
+}
 
 
-//void CmfcplotDoc::OnUpdateMoveMenu(CCmdUI* pCmdUI)
-//{
-//	// TODO: 在此添加命令更新用户界面处理程序代码
-//	pCmdUI->SetCheck(isMoving);
-//}
+void CmfcplotDoc::OnPolarFuncMenu()
+{
+	// TODO: 在此添加命令处理程序代码
+	CPolarFuncDlg  dlg;
+	//	
+	if (dlg.DoModal() == IDOK)
+	{
+		if (m_SingelMode) {
+			if (m_FD) delete m_FD;
+			m_List.RemoveAll();
+		}
+		m_FD = new PolarFD(dlg.m_sEquation, dlg.m_Thetamin, dlg.m_Thetamax, dlg.m_StepTheta, dlg.m_color, dlg.m_penWidth, dlg.m_penType);
+		if (m_FD->CalcList() == false) {
+			AfxMessageBox(_T("请检查方程是否完整！"));
+		}
+		else {
+			if (m_FD->minY < m_Ymin) m_Ymin = m_FD->minY;
+			if (m_FD->maxY > m_Ymax) m_Ymax = m_FD->maxY;
+			m_List.AddTail(m_FD);
+		}
+
+	}
+	UpdateAllViews(NULL);
+
+}
+
+
+void CmfcplotDoc::OnTwoFuncMenu()
+{
+	// TODO: 在此添加命令处理程序代码
+	CTwoFuncDlg  dlg;
+	if (dlg.DoModal() == IDOK)
+	{
+		
+		if (m_SingelMode) {
+			if (m_FD) delete m_FD;
+			m_List.RemoveAll();
+		}
+		m_FD = new TwoFD(dlg.m_sEquationX, dlg.m_sEquationY, dlg.m_Tmin, dlg.m_Tmax, dlg.m_stepT, dlg.m_color, dlg.m_penWidth, dlg.m_penType);
+		if (m_FD->CalcList() == false) {
+			AfxMessageBox(_T("请检查方程是否完整！"));
+		}
+		else {
+			if (m_FD->minY < m_Ymin) m_Ymin = m_FD->minY;
+			if (m_FD->maxY > m_Ymax) m_Ymax = m_FD->maxY;
+			m_List.AddTail(m_FD);
+		}
+		
+	}
+	UpdateAllViews(NULL);
+}
+
+
+void CmfcplotDoc::OnDataFuncMenu()
+{
+	// TODO: 在此添加命令处理程序代码
+	CDataFuncDlg dlg;
+	if (dlg.DoModal()) {
+		if (m_SingelMode) {
+			if (m_FD) delete m_FD;
+			m_List.RemoveAll();
+		}
+		m_FD = new DataFD(dlg.vetX, dlg.vetY);
+		CString str;
+		//str.Format("%d", dlg)
+		//	AfxMessageBox();
+		if (m_FD->minY < m_Ymin) m_Ymin = m_FD->minY;
+		if (m_FD->maxY > m_Ymax) m_Ymax = m_FD->maxY;
+		m_List.AddTail(m_FD);
+	}
+	
+	UpdateAllViews(NULL);
+}
