@@ -18,6 +18,8 @@ public:
 	bool m_WillShowAxis;
 	bool m_WillShowEdge;
 	bool m_SingelMode;
+	bool m_ForceXrange;
+	bool m_ShowNearPoint;
 	double m_Xmin, m_Xmax, m_Ymin, m_Ymax;
 	//int nTop, nButton, nLeft, nRight;
 	FuncData *m_FD;
@@ -72,4 +74,11 @@ public:
 	afx_msg void OnPolarFuncMenu();
 	afx_msg void OnTwoFuncMenu();
 	afx_msg void OnDataFuncMenu();
+	afx_msg void OnFroceXrang();
+	afx_msg void OnUpdateFroceXrang(CCmdUI* pCmdUI);
+	afx_msg void OnDelallMenu();
+	afx_msg void OnNearpointMenu();
+	afx_msg void OnUpdateNearpointMenu(CCmdUI* pCmdUI);
+	afx_msg void OnAutorangeMenu();
+	afx_msg void OnDelfunconeMenu();
 };

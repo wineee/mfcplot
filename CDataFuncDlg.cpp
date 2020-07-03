@@ -44,7 +44,9 @@ void CDataFuncDlg::OnBnClickedButtonColor()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	CColorDialog dlg;
-	m_color = dlg.GetColor();
+	if (dlg.DoModal() == IDOK) {
+		m_color = dlg.GetColor();
+	}
 }
 
 

@@ -13,6 +13,7 @@
 #define IDD_DIALOG_POLARFUNC            319
 #define IDD_DIALOG_TWOFUNC              320
 #define IDD_DIALOG_DATAFUNC             324
+#define IDD_DIALOG_DEL                  327
 #define IDC_EDIT                        1000
 #define IDC_EQUATION_EDIT               1000
 #define IDC_BUTTON_1                    1001
@@ -96,14 +97,24 @@
 #define ID_EDGE_MENU                    32803
 #define ID_Menu32806                    32806
 #define ID_Menu_SET_XYRANGE             32807
+#define ID_32808                        32808
+#define ID_FROCE_XRANG                  32809
+#define ID_32810                        32810
+#define ID_DELALL_MENU                  32811
+#define ID_32812                        32812
+#define ID_NEARPOINT_MENU               32813
+#define ID_32814                        32814
+#define ID_AUTORANGE_MENU               32815
+#define ID_32816                        32816
+#define ID_DELFUNCONE_MENU              32817
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        327
-#define _APS_NEXT_COMMAND_VALUE         32808
-#define _APS_NEXT_CONTROL_VALUE         1018
+#define _APS_NEXT_RESOURCE_VALUE        329
+#define _APS_NEXT_COMMAND_VALUE         32818
+#define _APS_NEXT_CONTROL_VALUE         1019
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

@@ -55,7 +55,7 @@ void CTwoFuncDlg::OnBnClickedButtonSetfunc()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	UpdateData();
-	CFuncDlg dlg;
+	CFuncDlg dlg(1);
 	if (dlg.DoModal() == IDOK) {
 		m_sEquationX = dlg.m_strEquation;
 	}
@@ -68,7 +68,7 @@ void CTwoFuncDlg::OnBnClickedButtonSetfunc2()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	UpdateData();
-	CFuncDlg dlg;
+	CFuncDlg dlg(1);
 	if (dlg.DoModal() == IDOK) {
 		m_sEquationY = dlg.m_strEquation;
 	}

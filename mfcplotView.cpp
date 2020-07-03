@@ -31,17 +31,13 @@ BEGIN_MESSAGE_MAP(CmfcplotView, CView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
 //	ON_WM_NCMOUSEMOVE()
 	ON_WM_MOUSEMOVE()
-	//ON_COMMAND(ID_NORMAL_FUNC_MENU, &CmfcplotView::OnNormalFuncMenu)
-	//ON_COMMAND(ID_BIGGER_MENU, &CmfcplotView::OnBiggerMenu)
 	ON_WM_SETCURSOR()
 	ON_COMMAND(ID_MOVE_MENU, &CmfcplotView::OnMoveMenu)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
-//	ON_COMMAND(ID_FUNC_MODE, &CmfcplotView::OnFuncMode)
-//ON_UPDATE_COMMAND_UI(ID_FUNC_MODE, &CmfcplotView::OnUpdateFuncMode)
-//ON_UPDATE_COMMAND_UI(ID_FUNC_MODE, &CmfcplotView::OnUpdateFuncMode)
 //ON_UPDATE_COMMAND_UI(ID_EDGE_MENU, &CmfcplotView::OnUpdateEdgeMenu)
 ON_UPDATE_COMMAND_UI(ID_MOVE_MENU, &CmfcplotView::OnUpdateMoveMenu)
+ON_WM_LBUTTONDBLCLK()
 END_MESSAGE_MAP()
 
 // CmfcplotView 构造/析构
@@ -102,64 +98,62 @@ void CmfcplotView::OnDraw(CDC* pDC)
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
-	m_Xmin = pDoc->m_Xmin;
+	m_Xmin = pDoc->m_Xmin;//极值保存在Doc中
 	m_Xmax = pDoc->m_Xmax;
 	m_Ymin = pDoc->m_Ymin;
 	m_Ymax = pDoc->m_Ymax;
-	// TODO: 在此处为本机数据添加绘制代码
-	//CClientDC dc(this);
 	
 	CRect rect;
-	GetClientRect(&rect);
-	nTop = (int)round(rect.bottom * 0.1);
+	GetClientRect(&rect);//获得视图区
+
+	nTop = (int)round(rect.bottom * 0.1);  //函数图像不会占据整个视图区
 	nButton = (int)round(rect.bottom * 0.9);
 	nLeft = (int)round(rect.right * 0.1);
 	nRight = (int)round(rect.right * 0.9);
 
-	if (pDoc->m_WillShowEdge) {
+	if (pDoc->m_WillShowEdge) {//画边框
 		pDC->MoveTo(nLeft, nTop);
 		pDC->LineTo(nLeft, nButton);
 		pDC->LineTo(nRight, nButton);
 		pDC->LineTo(nRight, nTop);
 		pDC->LineTo(nLeft, nTop);
 	}
-	//double m_Xmin = 0, m_Xmax = 10, m_Ymin = 0, m_Ymax = 10;
 
-	//x坐标
+	//画x坐标信息
 	int nX,nY;
-	for (nX = nLeft; nX < nRight; nX += 50) {
-		//pDC->TextOutW(nX-2, nButton+3, _T("11"));
-		CRect textRect(nX - 25, nButton + 1, nX + 25, nButton + 20);
+	bool BIGX = abs(m_Xmin) > 100 || abs(m_Xmax) > 100;//x坐标值比较大时，标注更稀
+	for (nX = nLeft; nX < nRight; nX += (BIGX ? 100 : 50)) { //每隔100/50像素一个标注
+		CRect textRect(nX - (BIGX ? 50 : 25), nButton + 1, nX + (BIGX ? 50 : 25), nButton + 20);//显示区域
 		CString xInfo;
 		xInfo.Format(_T("%.2f"),LPxtoFPx(nX));
 		pDC->DrawText(xInfo, &textRect, DT_SINGLELINE | DT_CENTER);
-		                                    //单行,上下左右居中
+		                                    //单行,上下左右居中显示
 	}
-	if (nX-nRight <= 25) {
+	if (nX - nRight <= (BIGX ? 50 : 25)) {//最后一个x坐标，与前一个标注距离太近则不显示
 		CRect textRect(nRight, nButton + 1, nRight + 50, nButton + 20);
 		CString xInfo;
 		xInfo.Format(_T("%.2f"),m_Xmax);
-		pDC->DrawText(xInfo, &textRect, DT_SINGLELINE | DT_LEFT);
+		pDC->DrawText(xInfo, &textRect, DT_SINGLELINE | DT_LEFT | DT_TOP);
 	}
 
 	//y坐标
 	for (nY = nButton - 50; nY > nTop; nY -= 50) {
-		CRect textRect(nLeft - 50, nY-10, nLeft - 1, nY + 10);
+		CRect textRect(nLeft - 200, nY-10, nLeft - 3, nY + 10);
 		CString yInfo;
 		yInfo.Format(_T("%.2f"), LPytoFPy(nY));
-		pDC->DrawText(yInfo, &textRect, DT_SINGLELINE | DT_CENTER);
+		pDC->DrawText(yInfo, &textRect, DT_SINGLELINE | DT_RIGHT);
 	}
 	if (nTop - nY <= 25) {
-		CRect textRect(nLeft - 50, nTop - 10, nLeft - 1, nTop + 10);
+		CRect textRect(nLeft - 200, nTop - 10, nLeft - 3, nTop + 10);
 		CString yInfo;
 		yInfo.Format(_T("%.2f"),m_Ymax);
-		pDC->DrawText(yInfo, &textRect, DT_SINGLELINE | DT_BOTTOM);
+		pDC->DrawText(yInfo, &textRect, DT_SINGLELINE | DT_BOTTOM | DT_RIGHT);
 	}
 
 
 	//  显示网格
 	if (pDoc->m_WillShowGrid) {
-		CPen pen(PS_DOT, 1, RGB(100, 100, 100));           //创建笔，并调整坐标颜色
+		CPen pen(PS_DOT, 1, RGB(100, 100, 100));           //创建笔，虚线，并调整坐标颜色灰色
 		CPen *pOldPen = (CPen *)pDC->SelectObject(&pen);
 		for (nX = nLeft+50; nX < nRight; nX += 50) {
 			pDC->MoveTo(nX, nTop);
@@ -179,7 +173,7 @@ void CmfcplotView::OnDraw(CDC* pDC)
 		int oX = FPxtoLPx(0);
 		int oY = FPytoLPy(0);
 		bool showY = oX >= nLeft && oX <= nRight;
-		bool showX = oY >= nTop && oY <= nButton;
+		bool showX = oY >= nTop && oY <= nButton;//判断x,y轴是否在范围内
 		if (showX) {
 			pDC->MoveTo(nLeft - 10, oY);
 			pDC->LineTo(nRight + 10, oY);
@@ -191,7 +185,6 @@ void CmfcplotView::OnDraw(CDC* pDC)
 		if (showX && showY) {
 			pDC->TextOutW(oX + 1, oY + 1, _T("O"));
 		}
-		//pDC->Polygon(1,1,1,1,1,1);
 		if (showX) {
 			pDC->MoveTo(nRight + 10, oY);
 			pDC->LineTo(nRight + 5, oY + 5);
@@ -210,33 +203,24 @@ void CmfcplotView::OnDraw(CDC* pDC)
 	}
 
 	
-	
-	//vector<CPoint> vet = ;
-	/*
-	if (pDoc->m_FD) {
-		CPen pen(pDoc->m_FD->m_penType, pDoc->m_FD->m_penWidth, pDoc->m_FD->m_color);
-		CPen* pOldPen = (CPen*)pDC->SelectObject(&pen);
-		for (auto dot : pDoc->m_FD->vetPoint) {
-			if (dot.first < m_Xmin || dot.first > m_Xmax || dot.second < m_Ymin || dot.second > m_Ymax || dot.second != dot.second) {
-				shouldMov = true;
-				continue;
-			}
-			if (shouldMov) {
-				pDC->MoveTo(FPxtoLPx(dot.first), FPytoLPy(dot.second));
-				shouldMov = false;
-			}
-			else
-				pDC->LineTo(FPxtoLPx(dot.first), FPytoLPy(dot.second));
-		}
-		pDC->SelectObject(pOldPen);
-	}*/
-
 	POSITION p = pDoc->m_List.GetHeadPosition();
+
+	int showTop = nTop;
 	while (p != nullptr) {
-		bool shouldMov = true;
+		bool shouldMov = true;//一段曲线第一个点MoveTo，其他都是LineTo
 		FuncData* tmpFD = (FuncData*)pDoc->m_List.GetNext(p);
 		CPen pen(tmpFD->m_penType, tmpFD->m_penWidth, tmpFD->m_color);
 		CPen* pOldPen = (CPen*)pDC->SelectObject(&pen);
+
+		if (tmpFD->FuncCas == CAS_NORMAL) {//动态X坐标模式下，普通函数x范围与视图不同时自动同步
+			if (pDoc->m_ForceXrange && isMoving!=2)
+				if (tmpFD->minX != m_Xmin || tmpFD->maxX != m_Xmax) {
+					tmpFD->minX = m_Xmin;
+					tmpFD->maxX = m_Xmax;
+					tmpFD->CalcList();
+				}
+		}
+
 		for (auto dot : tmpFD->vetPoint) {
 			if (dot.first < m_Xmin || dot.first > m_Xmax || dot.second < m_Ymin || dot.second > m_Ymax || dot.second != dot.second) {
 				shouldMov = true;
@@ -249,8 +233,22 @@ void CmfcplotView::OnDraw(CDC* pDC)
 			else
 				pDC->LineTo(FPxtoLPx(dot.first), FPytoLPy(dot.second));
 		}
-		pDC->SelectObject(pOldPen);
 
+		pDC->MoveTo(nRight+5, showTop);//显示图例
+		pDC->LineTo(rect.right, showTop);
+		showTop += 5;
+		if (tmpFD->FuncCas == CAS_NORMAL)
+		    pDC->TextOutW(nRight + 5, showTop, _T("f(x)=")+tmpFD->m_Equation);
+		else if (tmpFD->FuncCas == CAS_POLAR)
+			pDC->TextOutW(nRight + 5, showTop, _T("r(t)=") + tmpFD->m_Equation);
+		else if (tmpFD->FuncCas == CAS_TWO) {
+			pDC->TextOutW(nRight + 5, showTop, _T("x(t)=") + tmpFD->m_Equation);
+			showTop += 20;
+			pDC->TextOutW(nRight + 5, showTop, _T("y(t)=") + tmpFD->GetEquation2());
+		} else if (tmpFD->FuncCas == CAS_DATA)
+			pDC->TextOutW(nRight + 5, showTop, _T("y(t)=") + tmpFD->m_Equation);
+		showTop += 25;
+		pDC->SelectObject(pOldPen);
 	}
 }
 
@@ -296,7 +294,7 @@ CmfcplotDoc* CmfcplotView::GetDocument() const // 非调试版本是内联的
 
 
 // CmfcplotView 消息处理程序
-
+bool tmp_redraw = false;
 
 void CmfcplotView::OnMouseMove(UINT nFlags, CPoint point)
 {
@@ -313,7 +311,6 @@ void CmfcplotView::OnMouseMove(UINT nFlags, CPoint point)
 	}
 
 	if (isMoving==2) {
-		//	m_cursor = LoadCursor(NULL, IDC_SIZEALL);
 		::SetCursor(LoadCursor(NULL, IDC_SIZEALL));
 		CmfcplotDoc* pDoc = GetDocument();
 		double detx = LPxtoFPx(point.x) - LPxtoFPx(m_posStart.x);
@@ -336,8 +333,6 @@ void CmfcplotView::OnMouseMove(UINT nFlags, CPoint point)
 		MemDC.SelectObject(&MemBitmap);
 		//先用一种颜色作为内存显示设备的背景色
 		MemDC.FillSolidRect(rect.left, rect.top, rect.right, rect.bottom, RGB(144, 144, 144));
-		//绘制坐标轴
-	
 		this->OnDraw(&MemDC);
 		//将内存中画好的图像直接拷贝到屏幕指定区域上
 		pDC->BitBlt(rect.left, rect.top, rect.right, rect.bottom, &MemDC, 0, 0, SRCCOPY);
@@ -350,34 +345,50 @@ void CmfcplotView::OnMouseMove(UINT nFlags, CPoint point)
 		::SetCursor(LoadCursor(NULL, IDC_HAND));
 	}
 
+	CmfcplotDoc* pDoc = GetDocument();
+	if (GetDocument()->m_ShowNearPoint && isMoving != 2) {
+		
+		pair<double, double> nearDot(1e14, 1e14);
+		pair<double, double> nowDot = std::make_pair(LPxtoFPx(point.x), LPytoFPy(point.y));//当前函数坐标
+		POSITION p = pDoc->m_List.GetHeadPosition();
+		COLORREF tmpcolor = RGB(0, 0, 0);
+		while (p != nullptr) {
+			FuncData* tmpFD = (FuncData*)pDoc->m_List.GetNext(p);
+			if (tmpFD->GetNearest(nowDot, nearDot)) {
+				tmpcolor = tmpFD->m_color;//枚举函数，找最近的
+			}
+		}
+		int nX = FPxtoLPx(nearDot.first);
+		int nY = FPytoLPy(nearDot.second);
+
+        CDC* pDC = GetDC();
+		if (tmp_redraw) {//标记有输出，刷新
+			CDC MemDC;
+			MemDC.CreateCompatibleDC(NULL);
+			CBitmap MemBitmap;
+			CRect rect;
+			GetClientRect(&rect);
+			MemBitmap.CreateCompatibleBitmap(pDC, rect.right, rect.bottom);
+			MemDC.SelectObject(&MemBitmap);
+			MemDC.FillSolidRect(rect.left, rect.top, rect.right, rect.bottom, RGB(255, 255, 255));
+			this->OnDraw(&MemDC);
+			pDC->BitBlt(rect.left, rect.top, rect.right, rect.bottom, &MemDC, 0, 0, SRCCOPY);
+		}
+		if (abs(nX - point.x) < 5 && abs(nY - point.y) < 5) {
+			tmp_redraw = true;//输出了，标记一下
+			CString msg;
+			msg.Format(_T("(%.2f,%.2f)"), nearDot.first, nearDot.second);
+			CRect textrect(nX, nY - 10, nX + 100, nY + 10);
+			COLORREF oldcolor = pDC->SetTextColor(tmpcolor);
+			pDC->DrawText(msg, &textrect, DT_SINGLELINE | DT_CENTER);
+			pDC->SetTextColor(oldcolor);
+		}
+		
+		ReleaseDC(pDC);
+	}
+
 	CView::OnMouseMove(nFlags, point);
 }
-
-
-
-//void CmfcplotView::OnNormalFuncMenu()
-//{
-//	// TODO: 在此添加命令处理程序代码
-//	CFuncDlg dlg;
-//	if (dlg.DoModal() == IDOK) {
-//
-//	}
-//}
-
-
-//void CmfcplotView::OnBiggerMenu()
-//{
-//	// TODO: 在此添加命令处理程序代码
-//	CmfcplotDoc* pDoc = GetDocument();
-//	ASSERT_VALID(pDoc);
-//	if (!pDoc)
-//		return;
-
-//	RedrawWindow();
-//}
-
-
-
 
 BOOL CmfcplotView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
@@ -445,23 +456,18 @@ void CmfcplotView::OnLButtonUp(UINT nFlags, CPoint point)
 }
 
 
-
-//void CmfcplotView::OnUpdateFuncMode(CCmdUI* pCmdUI)
-//{
-//	// TODO: 在此添加命令更新用户界面处理程序代码
-//	pCmdUI->SetCheck(3);
-//}
-
-
-//void CmfcplotView::OnUpdateEdgeMenu(CCmdUI* pCmdUI)
-//{
-//	// TODO: 在此添加命令更新用户界面处理程序代码
-//
-//}
-
-
 void CmfcplotView::OnUpdateMoveMenu(CCmdUI* pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 	pCmdUI->SetCheck(isMoving!=0);
+}
+
+
+void CmfcplotView::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CString msg;
+	msg.Format(_T("(%.4f,%.4f)"), LPxtoFPx(point.x), LPytoFPy(point.y));
+	AfxMessageBox(msg);
+	CView::OnLButtonDblClk(nFlags, point);
 }

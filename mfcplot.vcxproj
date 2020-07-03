@@ -185,6 +185,7 @@
   <ItemGroup>
     <ClInclude Include="CalculatorFunc.h" />
     <ClInclude Include="CDataFuncDlg.h" />
+    <ClInclude Include="CDelFuncDlg.h" />
     <ClInclude Include="CFuncDlg.h" />
     <ClInclude Include="CNormalFuncDlg.h" />
     <ClInclude Include="CPolarFuncDlg.h" />
@@ -203,6 +204,7 @@
   <ItemGroup>
     <ClCompile Include="CalculatorFunc.cpp" />
     <ClCompile Include="CDataFuncDlg.cpp" />
+    <ClCompile Include="CDelFuncDlg.cpp" />
     <ClCompile Include="CFuncDlg.cpp" />
     <ClCompile Include="CNormalFuncDlg.cpp" />
     <ClCompile Include="CPolarFuncDlg.cpp" />

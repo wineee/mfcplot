@@ -66,6 +66,7 @@ public:
 //	afx_msg void OnUpdateFuncMode(CCmdUI* pCmdUI);
 //	afx_msg void OnUpdateEdgeMenu(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateMoveMenu(CCmdUI* pCmdUI);
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // mfcplotView.cpp 中的调试版本

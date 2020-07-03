@@ -19,6 +19,7 @@
 #include "CSetXYrangeDlg.h"
 #include "CTwoFuncDlg.h"
 #include "CDataFuncDlg.h"
+#include "CDelFuncDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -48,6 +49,13 @@ BEGIN_MESSAGE_MAP(CmfcplotDoc, CDocument)
 	ON_COMMAND(ID_POLAR_FUNC_MENU, &CmfcplotDoc::OnPolarFuncMenu)
 	ON_COMMAND(ID_TWO_FUNC_MENU, &CmfcplotDoc::OnTwoFuncMenu)
 	ON_COMMAND(ID_DATA_FUNC_MENU, &CmfcplotDoc::OnDataFuncMenu)
+	ON_COMMAND(ID_FROCE_XRANG, &CmfcplotDoc::OnFroceXrang)
+	ON_UPDATE_COMMAND_UI(ID_FROCE_XRANG, &CmfcplotDoc::OnUpdateFroceXrang)
+	ON_COMMAND(ID_DELALL_MENU, &CmfcplotDoc::OnDelallMenu)
+	ON_COMMAND(ID_NEARPOINT_MENU, &CmfcplotDoc::OnNearpointMenu)
+	ON_UPDATE_COMMAND_UI(ID_NEARPOINT_MENU, &CmfcplotDoc::OnUpdateNearpointMenu)
+	ON_COMMAND(ID_AUTORANGE_MENU, &CmfcplotDoc::OnAutorangeMenu)
+	ON_COMMAND(ID_DELFUNCONE_MENU, &CmfcplotDoc::OnDelfunconeMenu)
 END_MESSAGE_MAP()
 
 
@@ -60,6 +68,8 @@ CmfcplotDoc::CmfcplotDoc() noexcept
 	m_WillShowAxis = true;
 	m_WillShowEdge = true;
 	m_SingelMode = true;
+	m_ForceXrange = false;
+	m_ShowNearPoint = false;
 	m_Xmin = -10;
 	m_Xmax = 10;
 	m_Ymin = -1;
@@ -90,13 +100,18 @@ BOOL CmfcplotDoc::OnNewDocument()
 
 void CmfcplotDoc::Serialize(CArchive& ar)
 {
+	m_List.Serialize(ar);
 	if (ar.IsStoring())
 	{
 		// TODO:  在此添加存储代码
+		ar <<  m_WillShowGrid << m_WillShowAxis << m_WillShowEdge << m_SingelMode << m_ForceXrange << m_ShowNearPoint \
+			<< m_Xmin << m_Xmax << m_Ymin << m_Ymax;
 	}
 	else
 	{
 		// TODO:  在此添加加载代码
+		ar >> m_WillShowGrid >> m_WillShowAxis >> m_WillShowEdge >> m_SingelMode >> m_ForceXrange >> m_ShowNearPoint \
+			>> m_Xmin >> m_Xmax >> m_Ymin >> m_Ymax;
 	}
 }
 
@@ -254,6 +269,9 @@ void CmfcplotDoc::OnFuncMode()
 {
 	// TODO: 在此添加命令处理程序代码
 	m_SingelMode = !m_SingelMode;
+	if (m_SingelMode == true) {
+		this->OnDelallMenu();
+	}
 }
 
 
@@ -322,6 +340,8 @@ void CmfcplotDoc::OnPolarFuncMenu()
 		else {
 			if (m_FD->minY < m_Ymin) m_Ymin = m_FD->minY;
 			if (m_FD->maxY > m_Ymax) m_Ymax = m_FD->maxY;
+			if (m_FD->minX < m_Xmin) m_Xmin = m_FD->minX;
+			if (m_FD->maxX > m_Xmax) m_Xmax = m_FD->maxX;
 			m_List.AddTail(m_FD);
 		}
 
@@ -337,7 +357,6 @@ void CmfcplotDoc::OnTwoFuncMenu()
 	CTwoFuncDlg  dlg;
 	if (dlg.DoModal() == IDOK)
 	{
-		
 		if (m_SingelMode) {
 			if (m_FD) delete m_FD;
 			m_List.RemoveAll();
@@ -349,6 +368,8 @@ void CmfcplotDoc::OnTwoFuncMenu()
 		else {
 			if (m_FD->minY < m_Ymin) m_Ymin = m_FD->minY;
 			if (m_FD->maxY > m_Ymax) m_Ymax = m_FD->maxY;
+			if (m_FD->minX < m_Xmin) m_Xmin = m_FD->minX;
+			if (m_FD->maxX > m_Xmax) m_Xmax = m_FD->maxX;
 			m_List.AddTail(m_FD);
 		}
 		
@@ -366,14 +387,117 @@ void CmfcplotDoc::OnDataFuncMenu()
 			if (m_FD) delete m_FD;
 			m_List.RemoveAll();
 		}
-		m_FD = new DataFD(dlg.vetX, dlg.vetY);
+		m_FD = new DataFD(dlg.vetX, dlg.vetY, dlg.m_color, dlg.m_penWidth, dlg.m_penType);
 		CString str;
 		//str.Format("%d", dlg)
-		//	AfxMessageBox();
 		if (m_FD->minY < m_Ymin) m_Ymin = m_FD->minY;
 		if (m_FD->maxY > m_Ymax) m_Ymax = m_FD->maxY;
+		if (m_FD->minX < m_Xmin) m_Xmin = m_FD->minX;
+		if (m_FD->maxX > m_Xmax) m_Xmax = m_FD->maxX;
 		m_List.AddTail(m_FD);
+		//AfxMessageBox(m_FD->m_Equation);
 	}
 	
+	UpdateAllViews(NULL);
+}
+
+
+void CmfcplotDoc::OnFroceXrang()
+{
+	// TODO: 在此添加命令处理程序代码
+	m_ForceXrange = !m_ForceXrange;
+	UpdateAllViews(NULL);
+}
+
+
+void CmfcplotDoc::OnUpdateFroceXrang(CCmdUI* pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(m_ForceXrange);
+}
+
+
+void CmfcplotDoc::OnNearpointMenu()
+{
+	// TODO: 在此添加命令处理程序代码
+	m_ShowNearPoint = !m_ShowNearPoint;
+}
+
+
+void CmfcplotDoc::OnUpdateNearpointMenu(CCmdUI* pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(m_ShowNearPoint);
+}
+
+void CmfcplotDoc::OnDelallMenu()
+{
+	// TODO: 在此添加命令处理程序代码
+	POSITION p = m_List.GetHeadPosition();
+	while (p != nullptr) {
+		FuncData* tmpFD = (FuncData*)m_List.GetNext(p);
+		delete tmpFD;
+	}
+	m_List.RemoveAll();
+	UpdateAllViews(NULL);
+}
+
+
+void CmfcplotDoc::OnAutorangeMenu()
+{
+	// TODO: 在此添加命令处理程序代码
+	double miX = -10, maX = 10, miY = -1, maY = 1;
+	POSITION p = m_List.GetHeadPosition();
+	bool flag = true;
+	while (p) {
+		FuncData* tmpFD = (FuncData*)m_List.GetNext(p);
+		if (flag) {
+			miY = tmpFD->minY;
+			maY = tmpFD->maxY;
+			miX = tmpFD->minX;
+			maX = tmpFD->maxX;
+			flag = false;
+		}
+		else {
+			if (tmpFD->minY < miY) miY = tmpFD->minY;
+			if (tmpFD->maxY > maY) maY = tmpFD->maxY;
+			if (tmpFD->minX < miX) miX = tmpFD->minX;
+			if (tmpFD->maxX > maX) maX = tmpFD->maxX;
+		}
+	}
+	if (miX == maX) {
+		miX -= 0.5;
+		maX += 0.5;
+	}
+	if (miY == maY) {
+		miY += 0.5;
+		maY -= 0.5;
+	}
+	m_Xmin = miX;
+	m_Xmax = maX;
+	m_Ymin = miY;
+	m_Ymax = maY;
+	UpdateAllViews(NULL);
+}
+
+
+void CmfcplotDoc::OnDelfunconeMenu()
+{
+	// TODO: 在此添加命令处理程序代码
+	int cnt = 0, id = 0;
+	CDelFuncDlg dlg;
+	if (dlg.DoModal()) {
+		id = dlg.m_id;
+	}
+	POSITION p = m_List.GetHeadPosition(),tmpp;
+	while (p) {
+		tmpp = p;
+		FuncData* tmpFD = (FuncData*)m_List.GetNext(p);
+		cnt++;
+		if (cnt == id) {
+			delete tmpFD;
+			m_List.RemoveAt(tmpp);
+		}
+	}
 	UpdateAllViews(NULL);
 }

@@ -11,11 +11,11 @@
 
 IMPLEMENT_DYNAMIC(CFuncDlg, CDialogEx)
 
-CFuncDlg::CFuncDlg(CWnd* pParent /*=nullptr*/)
+CFuncDlg::CFuncDlg(int cas, CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_NORMALFUNC_DIALOG, pParent)
 	, m_strEquation(_T(""))
 {
-
+	m_cas = cas;	
 }
 
 CFuncDlg::~CFuncDlg()
@@ -26,6 +26,7 @@ void CFuncDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EQUATION_EDIT, m_strEquation);
+	//DDX_Control(pDX, IDC_BUTTON_X, m_xkey);
 }
 
 
@@ -328,7 +329,8 @@ void CFuncDlg::OnBnClickedButtonX()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	UpdateData();
-	m_strEquation += "x";
+	if (m_cas == 0) m_strEquation += "x";
+	else m_strEquation += 't';
 	UpdateData(false);
 }
 

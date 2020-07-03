@@ -5,6 +5,7 @@
 #include "mfcplot.h"
 #include "CPolarFuncDlg.h"
 #include "afxdialogex.h"
+#include "CFuncDlg.h"
 
 
 // CPolarFuncDlg 对话框
@@ -41,6 +42,7 @@ void CPolarFuncDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CPolarFuncDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_COLOR, &CPolarFuncDlg::OnBnClickedButtonColor)
+	ON_BN_CLICKED(IDC_BUTTON_SETFUNC, &CPolarFuncDlg::OnBnClickedButtonSetfunc)
 END_MESSAGE_MAP()
 
 
@@ -54,4 +56,16 @@ void CPolarFuncDlg::OnBnClickedButtonColor()
 	if (dlg.DoModal() == IDOK) {
 		m_color = dlg.GetColor();
 	}
+}
+
+
+void CPolarFuncDlg::OnBnClickedButtonSetfunc()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	UpdateData();
+	CFuncDlg dlg(1);
+	if (dlg.DoModal()) {
+		m_sEquation = dlg.m_strEquation;
+	}
+	UpdateData(false);
 }

@@ -8,7 +8,7 @@ class CSetXYrangeDlg : public CDialogEx
 	DECLARE_DYNAMIC(CSetXYrangeDlg)
 
 public:
-	CSetXYrangeDlg(int Xmin, int Xmax, int Ymin, int Ymax, CWnd* pParent = nullptr);   // 标准构造函数
+	CSetXYrangeDlg(double Xmin, double Xmax, double Ymin, double Ymax, CWnd* pParent = nullptr);   // 标准构造函数
 	virtual ~CSetXYrangeDlg();
 
 // 对话框数据
@@ -21,9 +21,9 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	int m_Xmin;
+	double m_Xmin;
 //	afx_msg void OnEnChangeEdit1();
-	int m_Xmax;
-	int m_Ymin;
-	int m_Ymax;
+	double m_Xmax;
+	double m_Ymin;
+	double m_Ymax;
 };

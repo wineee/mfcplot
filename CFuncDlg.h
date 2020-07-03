@@ -8,9 +8,9 @@ class CFuncDlg : public CDialogEx
 	DECLARE_DYNAMIC(CFuncDlg)
 
 public:
-	CFuncDlg(CWnd* pParent = nullptr);   // 标准构造函数
+	CFuncDlg(int cas = 0,CWnd* pParent = nullptr);   // 标准构造函数
 	virtual ~CFuncDlg();
-
+	int m_cas;
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_NORMALFUNC_DIALOG };
@@ -57,4 +57,5 @@ public:
 	afx_msg void OnBnClickedButtonCeiling();
 	afx_msg void OnBnClickedButtonRound();
 	afx_msg void OnBnClickedButtonCubic();
+	//CButton m_xkey;
 };

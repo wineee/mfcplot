@@ -11,7 +11,7 @@
 
 IMPLEMENT_DYNAMIC(CSetXYrangeDlg, CDialogEx)
 
-CSetXYrangeDlg::CSetXYrangeDlg(int Xmin, int Xmax, int Ymin, int Ymax, CWnd* pParent /*=nullptr*/)
+CSetXYrangeDlg::CSetXYrangeDlg(double Xmin, double Xmax, double Ymin, double Ymax, CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DIALOG_SET_RANGE, pParent)
 	, m_Xmin(Xmin)
 	, m_Xmax(Xmax)

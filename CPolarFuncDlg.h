@@ -29,4 +29,5 @@ public:
 	COLORREF m_color;
 	afx_msg void OnBnClickedButtonColor();
 	int m_penType;
+	afx_msg void OnBnClickedButtonSetfunc();
 };
