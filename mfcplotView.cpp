@@ -51,12 +51,6 @@ CmfcplotView::CmfcplotView() noexcept
 	tmp_Xmax = m_Xmax = 10;
 	tmp_Ymin = m_Ymin = -1;
 	tmp_Ymax = m_Ymax = 1;
-	CRect rect;
-	GetClientRect(&rect);
-	nTop = (int)round(rect.bottom * 0.1);
-	nButton = (int)round(rect.bottom * 0.9);
-	nLeft = (int)round(rect.right * 0.1);
-	nRight = (int)round(rect.right * 0.9);
 }
 
 CmfcplotView::~CmfcplotView()
