@@ -75,7 +75,7 @@ CmfcplotDoc::CmfcplotDoc() noexcept
 	m_Ymin = -1;
 	m_Ymax = 1;
 	//int nTop, nButton, nLeft, nRight;
-
+	m_FD = nullptr;
 }
 
 CmfcplotDoc::~CmfcplotDoc()
