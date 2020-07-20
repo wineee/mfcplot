@@ -361,7 +361,7 @@ void CmfcplotView::OnMouseMove(UINT nFlags, CPoint point)
 
 ### 完整代码
 [github](https://github.com/wineee/mfcplot)
-  gitee
+[gitee](https://gitee.com/rewine/mfcplot)
 [csdn下载](https://download.csdn.net/download/qq_33831360/12636165)
 ### 参考资料
 - [DrawText函数的讲解](https://blog.csdn.net/by_mxy/article/details/9932967)
