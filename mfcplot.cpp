@@ -158,7 +158,6 @@ protected:
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
-//	afx_msg void OnUpdateFuncMode(CCmdUI* pCmdUI);
 };
 
 CAboutDlg::CAboutDlg() noexcept : CDialogEx(IDD_ABOUTBOX)
@@ -171,7 +170,6 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
-//	ON_UPDATE_COMMAND_UI(ID_FUNC_MODE, &CAboutDlg::OnUpdateFuncMode)
 END_MESSAGE_MAP()
 
 // 用于运行对话框的应用程序命令
@@ -182,12 +180,3 @@ void CmfcplotApp::OnAppAbout()
 }
 
 // CmfcplotApp 消息处理程序
-
-
-
-
-
-//void CAboutDlg::OnUpdateFuncMode(CCmdUI* pCmdUI)
-//{
-//	// TODO: 在此添加命令更新用户界面处理程序代码
-//}

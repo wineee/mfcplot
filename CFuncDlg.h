@@ -57,5 +57,4 @@ public:
 	afx_msg void OnBnClickedButtonCeiling();
 	afx_msg void OnBnClickedButtonRound();
 	afx_msg void OnBnClickedButtonCubic();
-	//CButton m_xkey;
 };

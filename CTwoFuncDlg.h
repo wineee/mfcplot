@@ -27,9 +27,9 @@ public:
 	double m_Tmax;
 	int m_stepT;
 	int m_penType;
+	int m_penWidth;
 	COLORREF m_color;
 	afx_msg void OnBnClickedButtonSetfunc();
 	afx_msg void OnBnClickedButtonSetfunc2();
 	afx_msg void OnBnClickedButtonColor();
-	int m_penWidth;
 };

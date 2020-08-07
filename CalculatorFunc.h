@@ -1,10 +1,5 @@
 #pragma once
 
-/*class CalculatorFunc
-{
-	//CString a;
-};*/
-
 bool IsNum(char c);
 bool IsOpt(char c);
 int cPriority(char c);

@@ -17,13 +17,14 @@ public:
 
 // 操作
 public:
-	double m_Xmin, m_Xmax, m_Ymin, m_Ymax;
-	int nTop, nButton, nLeft, nRight;
-	//HCURSOR m_cursor;
-	int isMoving;//0不拖动 1拖动模式 2正在拖动
-
-	double  tmp_Xmin, tmp_Xmax, tmp_Ymin, tmp_Ymax;
+	double m_Xmin, m_Xmax, m_Ymin, m_Ymax;//函数显示范围
+	int nTop, nButton, nLeft, nRight;//对应的逻辑坐标范围
+	int isMoving;//拖动状态 0不拖动 1拖动模式 2正在拖动
+	double tmp_Xmin, tmp_Xmax, tmp_Ymin, tmp_Ymax;
+	//拖动模式下，单击鼠标左键，记录起点的显示范围
 	CPoint m_posStart;
+	//拖动模式下，单击鼠标左键，记录起点的鼠标坐标
+	//根据鼠标坐标偏移量可以计算显示范围变化量
 
 	double LPxtoFPx(int x);
 	int FPxtoLPx(double x);
@@ -53,18 +54,11 @@ protected:
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
-//	afx_msg void OnNcMouseMove(UINT nHitTest, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-//	afx_msg void OnNormalFuncMenu();
-//	afx_msg void OnBiggerMenu();
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg void OnMoveMenu();
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
-//	afx_msg void OnFuncMode();
-//	afx_msg void OnUpdateFuncMode(CCmdUI* pCmdUI);
-//	afx_msg void OnUpdateFuncMode(CCmdUI* pCmdUI);
-//	afx_msg void OnUpdateEdgeMenu(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateMoveMenu(CCmdUI* pCmdUI);
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 };

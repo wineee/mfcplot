@@ -29,13 +29,11 @@ BEGIN_MESSAGE_MAP(CmfcplotView, CView)
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
-//	ON_WM_NCMOUSEMOVE()
 	ON_WM_MOUSEMOVE()
 	ON_WM_SETCURSOR()
 	ON_COMMAND(ID_MOVE_MENU, &CmfcplotView::OnMoveMenu)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
-//ON_UPDATE_COMMAND_UI(ID_EDGE_MENU, &CmfcplotView::OnUpdateEdgeMenu)
 ON_UPDATE_COMMAND_UI(ID_MOVE_MENU, &CmfcplotView::OnUpdateMoveMenu)
 ON_WM_LBUTTONDBLCLK()
 END_MESSAGE_MAP()
@@ -64,8 +62,6 @@ BOOL CmfcplotView::PreCreateWindow(CREATESTRUCT& cs)
 
 	return CView::PreCreateWindow(cs);
 }
-
-//
 
 
 double CmfcplotView::LPxtoFPx(int x) {
@@ -388,7 +384,6 @@ BOOL CmfcplotView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	if (isMoving) {
-//		SetCursor(m_cursor);
 		return TRUE;
 	}
 	return CView::OnSetCursor(pWnd, nHitTest, message);
@@ -403,7 +398,6 @@ void CmfcplotView::OnMoveMenu()
 	}
 	else {
 		isMoving = 1;
-		//m_cursor = LoadCursor(NULL, IDC_HAND);
 		::SetCursor(LoadCursor(NULL, IDC_HAND));
 	}
 }
@@ -415,7 +409,6 @@ void CmfcplotView::OnLButtonDown(UINT nFlags, CPoint point)
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	SetCapture();
 	if (isMoving == 1) {
-	//	m_cursor = LoadCursor(NULL, IDC_SIZEALL);
 		isMoving = 2;
 		m_posStart = point;
 		CmfcplotDoc* pDoc = GetDocument();
@@ -434,7 +427,6 @@ void CmfcplotView::OnLButtonUp(UINT nFlags, CPoint point)
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	if (isMoving == 2) {
 		isMoving = 1;
-		//m_cursor = LoadCursor(NULL, IDC_HAND);
 		::SetCursor(LoadCursor(NULL, IDC_HAND));
 		CmfcplotDoc* pDoc = GetDocument();
 		double detx = LPxtoFPx(point.x) - LPxtoFPx(m_posStart.x);

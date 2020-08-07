@@ -58,8 +58,6 @@ void CDataFuncDlg::OnBnClickedButtonReaddata()
 	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY, filter);
 	if (dlg.DoModal() == IDOK)
 	{
-		//CString str = dlg.GetPathName();
-		//MessageBox(str);
 		CStdioFile file;
 		file.Open(dlg.GetPathName(), CFile::modeRead);
 		CString tmp;
@@ -73,8 +71,6 @@ void CDataFuncDlg::OnBnClickedButtonReaddata()
 			int tmpy = _ttoi(tmp);
 			vetY.emplace_back(tmpy);
 		}
-		//AfxMessageBox(data);
-		//int cnt = dlg.Get
 	}
 
 }

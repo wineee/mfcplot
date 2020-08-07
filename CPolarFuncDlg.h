@@ -27,7 +27,7 @@ public:
 	int m_StepTheta;
 	int m_penWidth;
 	COLORREF m_color;
-	afx_msg void OnBnClickedButtonColor();
 	int m_penType;
+	afx_msg void OnBnClickedButtonColor();
 	afx_msg void OnBnClickedButtonSetfunc();
 };

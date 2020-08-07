@@ -37,7 +37,6 @@ void CNormalFuncDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT3, m_Xmax);
 	DDX_Text(pDX, IDC_EDIT4, m_stepX);
 	DDX_Text(pDX, IDC_EDIT1, m_penWidth);
-	//  DDX_Control(pDX, IDC_COMBO_LINETYPE, m_LineType_combo);
 	DDX_CBIndex(pDX, IDC_COMBO_LINETYPE, m_penType);
 }
 
@@ -45,7 +44,6 @@ void CNormalFuncDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CNormalFuncDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_SETFUNC, &CNormalFuncDlg::OnBnClickedButtonSetfunc)
 	ON_BN_CLICKED(IDC_BUTTON_COLOR, &CNormalFuncDlg::OnBnClickedButtonColor)
-	//ON_CBN_SELCHANGE(IDC_COMBO_LINETYPE, &CNormalFuncDlg::OnCbnSelchangeCombo1)
 END_MESSAGE_MAP()
 
 
@@ -72,10 +70,3 @@ void CNormalFuncDlg::OnBnClickedButtonColor()
 		m_color = dlg.GetColor();
 	}
 }
-
-
-//void CNormalFuncDlg::OnCbnSelchangeCombo1()
-//{
-//	// TODO: 在此添加控件通知处理程序代码
-//	
-//}

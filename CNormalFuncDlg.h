@@ -25,13 +25,9 @@ public:
 	double m_Xmin;
 	double m_Xmax;
 	int m_stepX;
-//	CPen m_pen;
 	COLORREF m_color;
 	afx_msg void OnBnClickedButtonSetfunc();
 	afx_msg void OnBnClickedButtonColor();
 	int m_penWidth;
 	int m_penType;
-	//void setdefault(double Xmin, double Xmax, int stepX);
-//	afx_msg void OnCbnSelchangeCombo1();
-//	CComboBox m_LineType_combo;
 };

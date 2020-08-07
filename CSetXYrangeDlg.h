@@ -22,7 +22,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	double m_Xmin;
-//	afx_msg void OnEnChangeEdit1();
 	double m_Xmax;
 	double m_Ymin;
 	double m_Ymax;

@@ -31,8 +31,6 @@ IMPLEMENT_DYNCREATE(CmfcplotDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CmfcplotDoc, CDocument)
 	ON_COMMAND(ID_AXIS_MENU, &CmfcplotDoc::OnAxisMenu)
-	//ON_COMMAND(ID_GRID_MENU, &CmfcplotDoc::OnGridMenu)
-	//ON_UPDATE_COMMAND_UI(ID_GRID_MENU, &CmfcplotDoc::OnUpdateGridMenu)
 	ON_COMMAND(ID_GRID_MENU, &CmfcplotDoc::OnGridMenu)
 	ON_COMMAND(ID_SMALLER_MENU, &CmfcplotDoc::OnSmallerMenu)
 	ON_COMMAND(ID_BIGGER_MENU, &CmfcplotDoc::OnBiggerMenu)
@@ -44,8 +42,6 @@ BEGIN_MESSAGE_MAP(CmfcplotDoc, CDocument)
 	ON_UPDATE_COMMAND_UI(ID_FUNC_MODE, &CmfcplotDoc::OnUpdateFuncMode)
 	ON_UPDATE_COMMAND_UI(ID_AXIS_MENU, &CmfcplotDoc::OnUpdateAxisMenu)
 	ON_UPDATE_COMMAND_UI(ID_GRID_MENU, &CmfcplotDoc::OnUpdateGridMenu)
-	//ON_COMMAND(ID_MOVE_MENU, &CmfcplotDoc::OnMoveMenu)
-	//ON_UPDATE_COMMAND_UI(ID_MOVE_MENU, &CmfcplotDoc::OnUpdateMoveMenu)
 	ON_COMMAND(ID_POLAR_FUNC_MENU, &CmfcplotDoc::OnPolarFuncMenu)
 	ON_COMMAND(ID_TWO_FUNC_MENU, &CmfcplotDoc::OnTwoFuncMenu)
 	ON_COMMAND(ID_DATA_FUNC_MENU, &CmfcplotDoc::OnDataFuncMenu)
@@ -74,7 +70,6 @@ CmfcplotDoc::CmfcplotDoc() noexcept
 	m_Xmax = 10;
 	m_Ymin = -1;
 	m_Ymax = 1;
-	//int nTop, nButton, nLeft, nRight;
 	m_FD = nullptr;
 }
 
@@ -92,8 +87,6 @@ BOOL CmfcplotDoc::OnNewDocument()
 
 	return TRUE;
 }
-
-
 
 
 // CmfcplotDoc 序列化
@@ -389,13 +382,11 @@ void CmfcplotDoc::OnDataFuncMenu()
 		}
 		m_FD = new DataFD(dlg.vetX, dlg.vetY, dlg.m_color, dlg.m_penWidth, dlg.m_penType);
 		CString str;
-		//str.Format("%d", dlg)
 		if (m_FD->minY < m_Ymin) m_Ymin = m_FD->minY;
 		if (m_FD->maxY > m_Ymax) m_Ymax = m_FD->maxY;
 		if (m_FD->minX < m_Xmin) m_Xmin = m_FD->minX;
 		if (m_FD->maxX > m_Xmax) m_Xmax = m_FD->maxX;
 		m_List.AddTail(m_FD);
-		//AfxMessageBox(m_FD->m_Equation);
 	}
 	
 	UpdateAllViews(NULL);

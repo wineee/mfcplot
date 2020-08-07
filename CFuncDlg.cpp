@@ -26,7 +26,6 @@ void CFuncDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EQUATION_EDIT, m_strEquation);
-	//DDX_Control(pDX, IDC_BUTTON_X, m_xkey);
 }
 
 

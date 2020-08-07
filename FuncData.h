@@ -80,7 +80,6 @@ public:
 	static int DataFD_Cnt;  //记录数据点类型函数数量
 	virtual double GetY(double tVal, bool& succ);
 	virtual bool CalcList();
-	//virtual bool GetNearest(pair<double, double> NowPoint, pair<double, double> CmpPoint);
 	virtual void Serialize(CArchive& ar);
 	DataFD();
 	DataFD(vector<double> &vetX, vector<double> &vetY, COLORREF color, int penWidth, int penType);

@@ -7,11 +7,7 @@
 #include "CalculatorFunc.h"
 
 const double inf = 1e14;
-// FuncData
 inline double Pow2(double x) { return x * x; }
-
-//IMPLEMENT_SERIAL(FuncData, CObject, 0)
-
 
 FuncData::FuncData()
 {
@@ -127,7 +123,7 @@ PolarFD::PolarFD(CString Equation, double min_T, double max_T, int step_T, COLOR
 	minth = min_T;
 }
 
-//
+
 double PolarFD::GetY(double thVal, bool& succ)
 {
 	return  CalcEquation(m_Equation, succ, 't', thVal);
@@ -141,7 +137,6 @@ bool PolarFD::CalcList()
 	minY = inf; maxY = -inf;
 	for (double tmp_th = minth; tmp_th <= maxth; tmp_th += detth) {
 		double tmp_r = this->GetY(tmp_th, succ);
-		//double
 		double tmp_x = tmp_r * cos(tmp_th);
 		double tmp_y = tmp_r * sin(tmp_th);
 		if (tmp_x > maxX) maxX = tmp_x;
@@ -166,8 +161,6 @@ void PolarFD::Serialize(CArchive& ar) {
 		this->CalcList();
 	}
 }
-///////////////////////////
-
 
 TwoFD::TwoFD()
 {
