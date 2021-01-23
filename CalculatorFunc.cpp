@@ -142,6 +142,7 @@ int cPriority(char c) {
 
 double CalcEquation(CString m_sEquation, bool& succ, char xKey, double xVal) {
 	//m_sEquation表达式 succ计算是否成功 xKey未知数是"x"还是"t"  xVal未知数的值
+	m_sEquation.Remove(' ');
 	if (m_sEquation.GetLength() == 0) {
 		succ = false;
 		return 0;
