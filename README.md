@@ -27,6 +27,7 @@ mfc数学函数曲线绘制程序
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/2020072001273763.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMzODMxMzYw,size_16,color_FFFFFF,t_70)
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720014118171.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMzODMxMzYw,size_16,color_FFFFFF,t_70)
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720014136668.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMzODMxMzYw,size_16,color_FFFFFF,t_70)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fwineee%2Fmfcplot.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fwineee%2Fmfcplot?ref=badge_shield)
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720014609420.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMzODMxMzYw,size_16,color_FFFFFF,t_70)
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/2020072001464030.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMzODMxMzYw,size_16,color_FFFFFF,t_70)
@@ -368,3 +369,7 @@ void CmfcplotView::OnMouseMove(UINT nFlags, CPoint point)
 - [VC双缓冲绘图技术介绍](https://blog.csdn.net/oceanlucy/article/details/46827809?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-7.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-7.nonecase)
  - 阎光伟，彭文，徐琳茜. 基于案例的Visual C++程序设计教程[M].北京：清华大学出版社，2012
  - 张晓民. VC++2010应用开发技术[M].北京：机械工业出版社，2013
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fwineee%2Fmfcplot.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fwineee%2Fmfcplot?ref=badge_large)
