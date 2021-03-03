@@ -24,15 +24,15 @@ mfc数学函数曲线绘制程序
 
 ### 界面展示
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720012121800.png)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/2020072001273763.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMzODMxMzYw,size_16,color_FFFFFF,t_70)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720014118171.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMzODMxMzYw,size_16,color_FFFFFF,t_70)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720014136668.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMzODMxMzYw,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/2020072001273763.png)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720014118171.png)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720014136668.png)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fwineee%2Fmfcplot.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fwineee%2Fmfcplot?ref=badge_shield)
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720014609420.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMzODMxMzYw,size_16,color_FFFFFF,t_70)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/2020072001464030.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMzODMxMzYw,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720014609420.png)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/2020072001464030.png)
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720014714925.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMzODMxMzYw,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720014714925.png)
 
 
 ### 设计结构
@@ -40,11 +40,11 @@ mfc数学函数曲线绘制程序
 &emsp; 用户输入函数信息，显示函数图像。还可以通过菜单和工具栏更改设置。
 
 &emsp; 通过计算样本点，相邻样本点用直线连接，当样本点数量足够大时，可近似看成曲线。
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720162214892.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMzODMxMzYw,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720162214892.png)
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720161921318.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMzODMxMzYw,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720161921318.png)
 ##### 程序所有源文件
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720162844144.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMzODMxMzYw,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720162844144.png)
 ##### CalculatorFunc.cpp介绍
 >double CalcEquation(CString m_sEquation, bool& succ, char xKey, double xVal) 
 >m_sEquation:表达式 
@@ -58,7 +58,7 @@ mfc数学函数曲线绘制程序
 
 &emsp;对方程，分为数（常数，未知数x），双目运算符(+ , - ,*  , / , ^ ) ,单目运算符(sin,cos等等)，单目运算符后面是一个完整的子式，如2+cos(x+1)中，x+1就是一个完整的式子，通过递归调用可以求子式的值，如果已知子式值，这个[单目运算符+子式]就是一个已知数了，那剩下的就等效于只有+ , - , * , / , ^  的公式，用表达式栈法就可以解决。
 ##### FuncData.cpp介绍
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720161950216.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMzODMxMzYw,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720161950216.png)
 ```cpp
 FuncData类
 成员变量：
