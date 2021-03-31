@@ -1,7 +1,7 @@
 # mfcplot
 mfc数学函数曲线绘制程序
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fwineee%2Fmfcplot.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fwineee%2Fmfcplot?ref=badge_shield)
 ### 实验环境
-
  - window 10 版本19041
  - Microsoft Visual Studio Community 2019 版本 16.6.4
 
@@ -27,13 +27,9 @@ mfc数学函数曲线绘制程序
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/2020072001273763.png)
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720014118171.png)
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720014136668.png)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fwineee%2Fmfcplot.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fwineee%2Fmfcplot?ref=badge_shield)
-
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720014609420.png)
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/2020072001464030.png)
-
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200720014714925.png)
-
 
 ### 设计结构
 ##### 程序流程及设计
